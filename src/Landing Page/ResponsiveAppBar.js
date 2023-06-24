@@ -1,5 +1,5 @@
-import React from "react";
-import { NavLink } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { NavLink, useNavigate } from "react-router-dom";
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
 import Toolbar from "@mui/material/Toolbar";
@@ -13,13 +13,30 @@ import Tooltip from "@mui/material/Tooltip";
 import MenuItem from "@mui/material/MenuItem";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import FitnessCenterIcon from "@mui/icons-material/FitnessCenter";
+import { signOut } from "firebase/auth";
+import { auth } from "../firebaseConfig";
+import Snackbar from "@mui/material/Snackbar";
+import Alert from "@mui/material/Alert";
 
 const pages = ["Overview", "Why Track?"];
 const settings = ["Profile", "Account", "Dashboard", "Logout"];
 
 function ResponsiveAppBar() {
-  const [anchorElNav, setAnchorElNav] = React.useState(null);
-  const [anchorElUser, setAnchorElUser] = React.useState(null);
+  const [anchorElNav, setAnchorElNav] = useState(null);
+  const [anchorElUser, setAnchorElUser] = useState(null);
+  const [loggedIn, setLoggedIn] = useState(false);
+  const [showLogoutConfirmation, setShowLogoutConfirmation] = useState(false);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const unsubscribe = auth.onAuthStateChanged((user) => {
+      setLoggedIn(!!user);
+    });
+
+    return () => {
+      unsubscribe();
+    };
+  }, []);
 
   const handleOpenNavMenu = (event) => {
     setAnchorElNav(event.currentTarget);
@@ -31,6 +48,18 @@ function ResponsiveAppBar() {
 
   const handleCloseUserMenu = () => {
     setAnchorElUser(null);
+  };
+
+  const handleLogout = async () => {
+    try {
+      await signOut(auth);
+      setShowLogoutConfirmation(true);
+      setTimeout(() => {
+        navigate("/signin");
+      }, 1500); // Delay before redirecting to signin page
+    } catch (err) {
+      console.error(err);
+    }
   };
 
   return (
@@ -99,7 +128,7 @@ function ResponsiveAppBar() {
             variant="h6"
             noWrap
             component="a"
-            href=""
+            href="/"
             sx={{
               mr: 0,
               display: { xs: "flex", md: "none" },
@@ -126,11 +155,27 @@ function ResponsiveAppBar() {
           </Box>
 
           <Box className="accountIcon">
-            <NavLink to="/signin">
-              <IconButton>
-                <AccountCircleIcon fontSize="large" alt="Account" />
-              </IconButton>
-            </NavLink>
+            {loggedIn ? (
+              <Button
+                variant="outlined"
+                color="inherit"
+                onClick={handleLogout}
+                sx={{
+                  "&:hover": {
+                    borderColor: "white",
+                    backgroundColor: "rgba(255, 255, 255, 0.1)",
+                  },
+                }}
+              >
+                Logout
+              </Button>
+            ) : (
+              <NavLink to="/signin">
+                <IconButton>
+                  <AccountCircleIcon fontSize="large" alt="Account" />
+                </IconButton>
+              </NavLink>
+            )}
             <Menu
               sx={{ mt: "45px" }}
               id="menu-appbar"
@@ -156,6 +201,22 @@ function ResponsiveAppBar() {
           </Box>
         </Toolbar>
       </Container>
+      <Snackbar
+        open={showLogoutConfirmation}
+        autoHideDuration={3000}
+        onClose={() => setShowLogoutConfirmation(false)}
+        anchorOrigin={{
+          vertical: "top",
+          horizontal: "right",
+        }}
+      >
+        <Alert
+          onClose={() => setShowLogoutConfirmation(false)}
+          severity="success"
+        >
+          Logging you out
+        </Alert>
+      </Snackbar>
     </AppBar>
   );
 }

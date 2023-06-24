@@ -59,17 +59,10 @@ function SignIn() {
     setModalOpen(false);
   };
 
-  const logout = async () => {
-    try {
-      await signOut(auth);
-    } catch (err) {
-      console.error(err);
-    }
-  };
-
   const signInWithGoogle = async () => {
     try {
       await signInWithPopup(auth, googleProvider);
+      navigate("/dashboard"); // Redirect to the dashboard
     } catch (err) {
       console.error(err);
     }
@@ -153,15 +146,7 @@ function SignIn() {
               </Grid>
             </Box>
           </Box>
-          <Button
-            type="submit"
-            fullWidth
-            variant="contained"
-            sx={{ mt: 3, mb: 2 }}
-            onClick={logout}
-          >
-            Logout
-          </Button>
+
           <Button
             type="submit"
             fullWidth

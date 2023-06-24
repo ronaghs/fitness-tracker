@@ -295,3 +295,64 @@
 .fc-header-toolbar {
   margin-top: 2rem;
 }
+
+/* WORKOUT TRACKING CSS */
+.editModalInput {
+  display: flex;
+  flex-direction: column;
+}
+
+.exerciseCard {
+  margin-left: 12rem;
+  margin-right: 10rem;
+  margin-top: 2rem;
+}
+
+/* NEED TO MODIFY FOR MOBILE  */
+.exerciseInputFieldContainer {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  margin-bottom: 1rem;
+  margin-top: 2rem;
+}
+
+.exerciseInputFieldContainer input {
+  padding: 0.5rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 1rem;
+}
+
+.exerciseInputFieldContainer input:focus {
+  outline: none;
+  border-color: #007bff;
+  box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.25);
+  border: 1px solid rgba(0, 0, 0, 0.2);
+}
+
+/* Exercise Cards */
+.exerciseCard {
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  transition: box-shadow 0.3s ease;
+}
+
+.exerciseCard:hover {
+  box-shadow: 0 8px 12px rgba(0, 0, 0, 0.2);
+}
+
+/* Add Set Button */
+.addSetButton {
+  background-color: #4caf50;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  font-size: 14px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.addSetButton:hover {
+  background-color: #45a049;
+}

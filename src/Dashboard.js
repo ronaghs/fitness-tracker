@@ -1,12 +1,12 @@
 import React from "react";
-import MyCalendar from "./Dashboard/Calendar";
+import Calendar from "./Dashboard/Calendar";
 import Navbar from "./Landing Page/ResponsiveAppBar";
 
 function Dashboard() {
   return (
     <div>
       <Navbar />
-      <MyCalendar />
+      <Calendar />
     </div>
   );
 }

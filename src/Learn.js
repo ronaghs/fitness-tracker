@@ -97,13 +97,30 @@ export function Learn() {
           user.uid,
           "workouts"
         );
+
+        // Get all workouts for the same exercise
+        const q = query(
+          workoutsCollectionRef,
+          where("date", "==", date),
+          where("uid", "==", user.uid),
+          where("exercise", "==", exercise)
+        );
+        const snapshot = await getDocs(q);
+        const workoutData = snapshot.docs.map((doc) => doc.data());
+
+        // Calculate the set number
+        const setNumber = workoutData.length > 0 ? workoutData.length + 1 : 1;
+
+        // Add the workout with the set number
         const newWorkoutRef = await addDoc(workoutsCollectionRef, {
           exercise,
           reps,
           weight,
+          set: setNumber, // Add the set number field
           date,
           uid: user.uid,
         });
+
         setWorkouts((prevWorkouts) => [
           ...prevWorkouts,
           {
@@ -111,10 +128,12 @@ export function Learn() {
             exercise,
             reps,
             weight,
+            set: setNumber,
             date,
             uid: user.uid,
           },
         ]);
+
         setReps("");
         setWeight("");
         repsInputRef.current.focus();
@@ -130,8 +149,26 @@ export function Learn() {
       if (user) {
         const workoutDocRef = doc(db, "users", user.uid, "workouts", id);
         await deleteDoc(workoutDocRef);
+
+        // Filter out the deleted workout
         setWorkouts((prevWorkouts) =>
           prevWorkouts.filter((workout) => workout.id !== id)
+        );
+
+        // Renumber the sets for the remaining workouts of the same exercise
+        const remainingWorkouts = workouts.filter(
+          (workout) => workout.id !== id && workout.exercise === exercise
+        );
+        const updatedWorkouts = remainingWorkouts.map((workout, index) => ({
+          ...workout,
+          set: index + 1,
+        }));
+        setWorkouts((prevWorkouts) =>
+          prevWorkouts.map((workout) =>
+            workout.exercise === exercise
+              ? updatedWorkouts.find((w) => w.id === workout.id)
+              : workout
+          )
         );
       }
     } catch (error) {
@@ -156,44 +193,64 @@ export function Learn() {
     return groupedWorkouts;
   };
 
+  const VerticalDivider = styled("div")({
+    width: "1px",
+    backgroundColor: "#ccc",
+    height: "100%",
+    marginLeft: "8px",
+    marginRight: "8px",
+  });
+
   const renderWorkouts = () => {
     const groupedWorkouts = groupWorkoutsByExercise();
 
     return groupedWorkouts.map((group, index) => (
       <Card key={index} className="exerciseCard">
         <CardContent>
-          <Typography variant="h5" component="h2">
+          <Typography
+            variant="h6"
+            component="h2"
+            className="exerciseName"
+            style={{ fontSize: "1.75rem", fontWeight: "bold" }}
+          >
             {group.exercise}
           </Typography>
           <div style={{ display: "flex", flexWrap: "wrap" }}>
-            {group.sets.map((set, setIndex) => (
-              <div key={setIndex} style={{ marginRight: "1rem" }}>
-                <Typography variant="body2" component="p">
-                  Reps: {editSetId === set.id ? tempReps : set.reps}
-                </Typography>
-                <Typography variant="body2" component="p">
-                  Weight: {editSetId === set.id ? tempWeight : set.weight}
-                </Typography>
-                <Tooltip title="Delete Set">
-                  <IconButton
-                    onClick={() => deleteWorkout(set.id)}
-                    aria-label="delete"
-                    sx={{ color: "red" }}
-                  >
-                    <DeleteIcon />
-                  </IconButton>
-                </Tooltip>
-                <Tooltip title="Edit Set">
-                  <IconButton
-                    onClick={() => handleEditClick(set)}
-                    aria-label="edit"
-                    sx={{ color: "green" }}
-                  >
-                    <EditIcon />
-                  </IconButton>
-                </Tooltip>
-              </div>
-            ))}
+            {group.sets
+              .sort((a, b) => a.set - b.set) // Sort workouts by set numbers in ascending order
+              .map((set, setIndex) => (
+                <div key={setIndex} className="workoutSet">
+                  <Typography variant="body1" component="p" className="setData">
+                    <span className="setLabel">Set:</span> {set.set}
+                  </Typography>
+                  <Typography variant="body1" component="p" className="setData">
+                    <span className="setLabel">Reps:</span>{" "}
+                    {editSetId === set.id ? tempReps : set.reps}
+                  </Typography>
+                  <Typography variant="body1" component="p" className="setData">
+                    <span className="setLabel">Weight:</span>{" "}
+                    {editSetId === set.id ? tempWeight : set.weight}
+                  </Typography>
+                  <Tooltip title="Delete Set">
+                    <IconButton
+                      onClick={() => deleteWorkout(set.id)}
+                      aria-label="delete"
+                      sx={{ color: "red" }}
+                    >
+                      <DeleteIcon />
+                    </IconButton>
+                  </Tooltip>
+                  <Tooltip title="Edit Set">
+                    <IconButton
+                      onClick={() => handleEditClick(set)}
+                      aria-label="edit"
+                      sx={{ color: "green" }}
+                    >
+                      <EditIcon />
+                    </IconButton>
+                  </Tooltip>
+                </div>
+              ))}
           </div>
         </CardContent>
       </Card>
@@ -268,21 +325,6 @@ export function Learn() {
         </button>
       </div>
       <div>{renderWorkouts()}</div>
-      {workouts.length === 0 && (
-        <div
-          style={{
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            height: "70vh",
-            color: "#ccc",
-            fontSize: "1.5rem",
-          }}
-        >
-          Add a set to get tracking
-        </div>
-      )}
-
       <Modal open={openModal} onClose={handleCancelEdit}>
         <Box
           sx={{

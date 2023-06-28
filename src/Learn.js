@@ -63,8 +63,7 @@ export function Learn() {
           const q = query(
             workoutsCollectionRef,
             where("date", "==", date),
-            where("uid", "==", user.uid),
-            orderBy("exercise") // Sort workouts by exercise name
+            where("uid", "==", user.uid)
           );
           const snapshot = await getDocs(q);
           const workoutData = snapshot.docs.map((doc) => ({
@@ -85,6 +84,8 @@ export function Learn() {
         setWorkouts([]);
       }
     });
+
+    return () => unsubscribe();
   }, [date]);
 
   const addWorkout = async () => {
@@ -111,14 +112,16 @@ export function Learn() {
         // Calculate the set number
         const setNumber = workoutData.length > 0 ? workoutData.length + 1 : 1;
 
-        // Add the workout with the set number
+        // Add the workout with the set number and timestamp
+        const timestamp = new Date().getTime(); // Get current timestamp
         const newWorkoutRef = await addDoc(workoutsCollectionRef, {
           exercise,
           reps,
           weight,
-          set: setNumber, // Add the set number field
+          set: setNumber,
           date,
           uid: user.uid,
+          timestamp, // Add timestamp field
         });
 
         setWorkouts((prevWorkouts) => [
@@ -131,6 +134,7 @@ export function Learn() {
             set: setNumber,
             date,
             uid: user.uid,
+            timestamp,
           },
         ]);
 
@@ -150,26 +154,30 @@ export function Learn() {
         const workoutDocRef = doc(db, "users", user.uid, "workouts", id);
         await deleteDoc(workoutDocRef);
 
-        // Filter out the deleted workout
-        setWorkouts((prevWorkouts) =>
-          prevWorkouts.filter((workout) => workout.id !== id)
-        );
+        setWorkouts((prevWorkouts) => {
+          // Filter out the deleted workout
+          const updatedWorkouts = prevWorkouts.filter(
+            (workout) => workout.id !== id
+          );
 
-        // Renumber the sets for the remaining workouts of the same exercise
-        const remainingWorkouts = workouts.filter(
-          (workout) => workout.id !== id && workout.exercise === exercise
-        );
-        const updatedWorkouts = remainingWorkouts.map((workout, index) => ({
-          ...workout,
-          set: index + 1,
-        }));
-        setWorkouts((prevWorkouts) =>
-          prevWorkouts.map((workout) =>
+          // Renumber the sets for the remaining workouts of the same exercise
+          const remainingWorkouts = updatedWorkouts.filter(
+            (workout) => workout.exercise === exercise
+          );
+          const renumberedWorkouts = remainingWorkouts.map(
+            (workout, index) => ({
+              ...workout,
+              set: index + 1,
+            })
+          );
+
+          // Merge the updated and renumbered workouts
+          return updatedWorkouts.map((workout) =>
             workout.exercise === exercise
-              ? updatedWorkouts.find((w) => w.id === workout.id)
+              ? renumberedWorkouts.find((w) => w.id === workout.id)
               : workout
-          )
-        );
+          );
+        });
       }
     } catch (error) {
       console.error("Error deleting workout: ", error);
@@ -177,31 +185,61 @@ export function Learn() {
   };
 
   const groupWorkoutsByExercise = () => {
-    const groupedWorkouts = [];
-    let currentExercise = null;
-    let currentGroup = null;
+    const groupedWorkouts = new Map();
 
     workouts.forEach((workout) => {
-      if (workout.exercise !== currentExercise) {
-        currentExercise = workout.exercise;
-        currentGroup = { exercise: currentExercise, sets: [] };
-        groupedWorkouts.push(currentGroup);
+      const { exercise } = workout;
+
+      if (groupedWorkouts.has(exercise)) {
+        groupedWorkouts.get(exercise).push(workout);
+      } else {
+        groupedWorkouts.set(exercise, [workout]);
       }
-      currentGroup.sets.push(workout);
     });
 
-    return groupedWorkouts;
+    // Sort workouts within each exercise group by timestamp in ascending order
+    groupedWorkouts.forEach((sets) => {
+      sets.sort((a, b) => a.timestamp - b.timestamp);
+    });
+
+    // Convert the Map to an array of objects
+    const groupedWorkoutsArray = Array.from(
+      groupedWorkouts,
+      ([exercise, sets]) => ({
+        exercise,
+        sets,
+      })
+    );
+
+    // Sort exercise groups based on the earliest workout timestamp within each group
+    groupedWorkoutsArray.sort((a, b) => {
+      const aEarliestTimestamp = a.sets[0]?.timestamp || Infinity;
+      const bEarliestTimestamp = b.sets[0]?.timestamp || Infinity;
+      return aEarliestTimestamp - bEarliestTimestamp;
+    });
+
+    return groupedWorkoutsArray;
   };
 
-  const VerticalDivider = styled("div")({
-    width: "1px",
-    backgroundColor: "#ccc",
-    height: "100%",
-    marginLeft: "8px",
-    marginRight: "8px",
-  });
-
   const renderWorkouts = () => {
+    if (workouts.length === 0) {
+      return (
+        <div
+          style={{
+            opacity: "0.9",
+            position: "absolute",
+            top: "50%",
+            left: "50%",
+            transform: "translate(-50%, -50%)",
+            textAlign: "center",
+            marginTop: "50px",
+          }}
+        >
+          <h3>Add a set to start tracking</h3>
+        </div>
+      );
+    }
+
     const groupedWorkouts = groupWorkoutsByExercise();
 
     return groupedWorkouts.map((group, index) => (
@@ -220,9 +258,6 @@ export function Learn() {
               .sort((a, b) => a.set - b.set) // Sort workouts by set numbers in ascending order
               .map((set, setIndex) => (
                 <div key={setIndex} className="workoutSet">
-                  <Typography variant="body1" component="p" className="setData">
-                    <span className="setLabel">Set:</span> {set.set}
-                  </Typography>
                   <Typography variant="body1" component="p" className="setData">
                     <span className="setLabel">Reps:</span>{" "}
                     {editSetId === set.id ? tempReps : set.reps}

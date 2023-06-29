@@ -23,6 +23,7 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import { IconButton, Tooltip, Modal } from "@mui/material";
 import EditIcon from "@mui/icons-material/Edit";
 import { styled } from "@mui/system";
+import TextBox from "./Notes";
 
 const ModalContainer = styled("div")(({ theme }) => ({
   position: "absolute",
@@ -37,7 +38,7 @@ const ModalContainer = styled("div")(({ theme }) => ({
 }));
 
 export function Learn() {
-  const { date } = useParams();
+  const { date, eventTitle } = useParams();
   const [workouts, setWorkouts] = useState([]);
   const [exercise, setExercise] = useState("");
   const [reps, setReps] = useState("");
@@ -46,8 +47,11 @@ export function Learn() {
   const [editSetId, setEditSetId] = useState("");
   const [tempReps, setTempReps] = useState("");
   const [tempWeight, setTempWeight] = useState("");
-
   const repsInputRef = useRef(null);
+
+  const pathname = window.location.pathname;
+  const workoutTitle = decodeURIComponent(pathname.split("/")[3]);
+  console.log(workoutTitle);
 
   useEffect(() => {
     const fetchWorkouts = async () => {
@@ -249,7 +253,11 @@ export function Learn() {
             variant="h6"
             component="h2"
             className="exerciseName"
-            style={{ fontSize: "1.75rem", fontWeight: "bold" }}
+            style={{
+              fontSize: "1.75rem",
+              fontWeight: "bold",
+            }}
+            sx={{ color: "#0372f0" }}
           >
             {group.exercise}
           </Typography>
@@ -347,18 +355,32 @@ export function Learn() {
           type="number"
           placeholder="Reps"
           value={reps}
-          onChange={(e) => setReps(e.target.value)}
+          onChange={(e) => {
+            const value = parseInt(e.target.value);
+            if (value >= 0 || isNaN(value)) {
+              // Validate if the value is greater than or equal to 0 or NaN
+              setReps(e.target.value);
+            }
+          }}
         />
+
         <input
           type="number"
           placeholder="Weight"
           value={weight}
-          onChange={(e) => setWeight(e.target.value)}
+          onChange={(e) => {
+            const value = parseInt(e.target.value);
+            if (value >= 0 || isNaN(value)) {
+              // Validate if the value is greater than or equal to 0 or NaN
+              setWeight(e.target.value);
+            }
+          }}
         />
         <button className="addSetButton" onClick={addWorkout}>
           Add Set
         </button>
       </div>
+      <h1 className="workoutTitle">{workoutTitle}</h1>
       <div>{renderWorkouts()}</div>
       <Modal open={openModal} onClose={handleCancelEdit}>
         <Box

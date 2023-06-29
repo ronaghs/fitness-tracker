@@ -17,6 +17,7 @@ import { signOut } from "firebase/auth";
 import { auth } from "../firebaseConfig";
 import Snackbar from "@mui/material/Snackbar";
 import Alert from "@mui/material/Alert";
+import Notes from "../Notes";
 
 const pages = ["Overview", "Why Track?"];
 const settings = ["Profile", "Account", "Dashboard", "Logout"];

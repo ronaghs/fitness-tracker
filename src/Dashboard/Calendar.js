@@ -24,6 +24,7 @@ import {
 } from "firebase/firestore";
 import { db, auth } from "../firebaseConfig"; // Update with your Firebase configuration
 import { onAuthStateChanged } from "firebase/auth";
+import { current } from "@reduxjs/toolkit";
 
 const Calendar = () => {
   const [open, setOpen] = useState(false);
@@ -127,7 +128,9 @@ const Calendar = () => {
 
       // Redirect to Learn component for the new event after a brief delay
       setTimeout(() => {
-        navigate(`/learn/${selectedDate}/${encodeURIComponent(event.title)}`);
+        navigate(
+          `/learn/${selectedDate}/${encodeURIComponent(event.title)}` // Pass event title as a URL parameter
+        );
       }, 500); // 0.5 second delay before redirected
     } catch (error) {
       console.error("Error adding event to Firestore:", error);

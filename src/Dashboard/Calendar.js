@@ -128,13 +128,15 @@ const Calendar = () => {
       // Redirect to Learn component for the new event after a brief delay
       setTimeout(() => {
         navigate(`/learn/${selectedDate}/${encodeURIComponent(event.title)}`);
-      }, 1000); // 1 second delay
+      }, 500); // 0.5 second delay before redirected
     } catch (error) {
       console.error("Error adding event to Firestore:", error);
     }
   };
 
-  const handleDeleteEvent = async (eventId) => {
+  const handleDeleteEvent = async (eventId, event) => {
+    event.stopPropagation(); // Stop event propagation to prevent navigation when clicking the delete icon
+
     try {
       const user = auth.currentUser;
       if (!user) {
@@ -170,7 +172,7 @@ const Calendar = () => {
         </Typography>
         <IconButton
           sx={{ color: "red" }}
-          onClick={() => handleDeleteEvent(eventInfo.event.id)}
+          onClick={(event) => handleDeleteEvent(eventInfo.event.id, event)}
         >
           <DeleteIcon />
         </IconButton>

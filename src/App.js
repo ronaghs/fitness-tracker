@@ -5,7 +5,7 @@ import SignIn from "./SignIn/SignIn";
 import SignUp from "./SignIn/SignUp";
 import Dashboard from "./Dashboard";
 import { Learn } from "./Learn";
-
+import Notes from "./Notes";
 function App() {
   return (
     <Router>
@@ -15,6 +15,7 @@ function App() {
         <Route path="/signup" element={<SignUp />} />
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/learn/:date/*" element={<Learn />} />
+        <Route path="/notes*" element={<Notes />} />
       </Routes>
     </Router>
   );

@@ -266,13 +266,7 @@ export function Learn() {
 
     return (
       <div>
-        <Button
-          id="viewNotesButton"
-          onClick={handleOpenDrawer}
-          variant="outlined"
-        >
-          View Notes
-        </Button>
+        <Notes date={date} />
         {groupedWorkouts.map((group, index) => (
           <Card key={index} className="exerciseCard">
             <CardContent>
@@ -333,32 +327,6 @@ export function Learn() {
             </CardContent>
           </Card>
         ))}
-
-        <Drawer anchor="right" open={openDrawer} onClose={handleCloseDrawer}>
-          <Notes
-            placeholder="Notes"
-            value={notes}
-            onChange={(e) => setNotes(e.target.value)}
-            rows={4}
-            cols={50}
-            style={{ resize: "none" }}
-          />
-          <div className="drawerContent">
-            {groupedWorkouts.map((group, index) => (
-              <div key={index}>
-                {group.sets.map((set, setIndex) => (
-                  <div key={setIndex}>
-                    <Box>
-                      <Typography variant="body2" component="p">
-                        {set.notes || "No notes available"}
-                      </Typography>
-                    </Box>
-                  </div>
-                ))}
-              </div>
-            ))}
-          </div>
-        </Drawer>
       </div>
     );
   };

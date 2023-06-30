@@ -342,6 +342,7 @@
   box-shadow: 0 8px 12px rgba(0, 0, 0, 0.2);
   display: flex;
   flex-direction: column;
+  align-items: flex-start;
 }
 
 .workoutTitle {
@@ -385,6 +386,13 @@
   background-color: #45a049;
 }
 
-.notes {
-  margin-left: 20rem;
+#viewNotesButton {
+  display: flex;
+  margin-left: auto;
+  margin-right: 12rem;
+}
+
+.MuiDrawer-paper {
+  width: 50%;
+  padding: 1rem;
 }

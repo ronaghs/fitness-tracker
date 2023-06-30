@@ -10,6 +10,7 @@ import {
   query,
   where,
   orderBy,
+  onSnapshot,
 } from "firebase/firestore";
 import { onAuthStateChanged } from "firebase/auth";
 import { useParams } from "react-router-dom";
@@ -21,9 +22,11 @@ import Button from "@mui/material/Button";
 import Box from "@mui/material/Box";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { IconButton, Tooltip, Modal } from "@mui/material";
+import Drawer from "@mui/material/Drawer";
 import EditIcon from "@mui/icons-material/Edit";
 import { styled } from "@mui/system";
-import TextBox from "./Notes";
+import Notes from "./Notes";
+import { AddNotesButton } from "./AddNotesButton";
 
 const ModalContainer = styled("div")(({ theme }) => ({
   position: "absolute",
@@ -47,6 +50,9 @@ export function Learn() {
   const [editSetId, setEditSetId] = useState("");
   const [tempReps, setTempReps] = useState("");
   const [tempWeight, setTempWeight] = useState("");
+  const [notes, setNotes] = useState("");
+  const [notesInput, setNotesInput] = useState("");
+  const [openDrawer, setOpenDrawer] = useState(false);
   const repsInputRef = useRef(null);
 
   const pathname = window.location.pathname;
@@ -113,7 +119,7 @@ export function Learn() {
         const snapshot = await getDocs(q);
         const workoutData = snapshot.docs.map((doc) => doc.data());
 
-        // Calculate the set number
+        // Calculate the set number (omitted from rendering atm because bugs out sometimes)
         const setNumber = workoutData.length > 0 ? workoutData.length + 1 : 1;
 
         // Add the workout with the set number and timestamp
@@ -126,6 +132,7 @@ export function Learn() {
           date,
           uid: user.uid,
           timestamp, // Add timestamp field
+          notes: notes,
         });
 
         setWorkouts((prevWorkouts) => [
@@ -139,11 +146,13 @@ export function Learn() {
             date,
             uid: user.uid,
             timestamp,
+            notes: notes, // Add notes field
           },
         ]);
 
         setReps("");
         setWeight("");
+        setNotes(""); // Clear the notes field
         repsInputRef.current.focus();
       }
     } catch (error) {
@@ -156,6 +165,7 @@ export function Learn() {
       const user = auth.currentUser;
       if (user) {
         const workoutDocRef = doc(db, "users", user.uid, "workouts", id);
+
         await deleteDoc(workoutDocRef);
 
         setWorkouts((prevWorkouts) => {
@@ -246,58 +256,111 @@ export function Learn() {
 
     const groupedWorkouts = groupWorkoutsByExercise();
 
-    return groupedWorkouts.map((group, index) => (
-      <Card key={index} className="exerciseCard">
-        <CardContent>
-          <Typography
-            variant="h6"
-            component="h2"
-            className="exerciseName"
-            style={{
-              fontSize: "1.75rem",
-              fontWeight: "bold",
-            }}
-            sx={{ color: "#0372f0" }}
-          >
-            {group.exercise}
-          </Typography>
-          <div style={{ display: "flex", flexWrap: "wrap" }}>
-            {group.sets
-              .sort((a, b) => a.set - b.set) // Sort workouts by set numbers in ascending order
-              .map((set, setIndex) => (
-                <div key={setIndex} className="workoutSet">
-                  <Typography variant="body1" component="p" className="setData">
-                    <span className="setLabel">Reps:</span>{" "}
-                    {editSetId === set.id ? tempReps : set.reps}
-                  </Typography>
-                  <Typography variant="body1" component="p" className="setData">
-                    <span className="setLabel">Weight:</span>{" "}
-                    {editSetId === set.id ? tempWeight : set.weight}
-                  </Typography>
-                  <Tooltip title="Delete Set">
-                    <IconButton
-                      onClick={() => deleteWorkout(set.id)}
-                      aria-label="delete"
-                      sx={{ color: "red" }}
-                    >
-                      <DeleteIcon />
-                    </IconButton>
-                  </Tooltip>
-                  <Tooltip title="Edit Set">
-                    <IconButton
-                      onClick={() => handleEditClick(set)}
-                      aria-label="edit"
-                      sx={{ color: "green" }}
-                    >
-                      <EditIcon />
-                    </IconButton>
-                  </Tooltip>
-                </div>
-              ))}
+    const handleOpenDrawer = () => {
+      setOpenDrawer(true);
+    };
+
+    const handleCloseDrawer = () => {
+      setOpenDrawer(false);
+    };
+
+    return (
+      <div>
+        <Button
+          id="viewNotesButton"
+          onClick={handleOpenDrawer}
+          variant="outlined"
+        >
+          View Notes
+        </Button>
+        {groupedWorkouts.map((group, index) => (
+          <Card key={index} className="exerciseCard">
+            <CardContent>
+              <Typography
+                variant="h6"
+                component="h2"
+                className="exerciseName"
+                style={{
+                  fontSize: "1.75rem",
+                  fontWeight: "bold",
+                }}
+                sx={{ color: "#0372f0" }}
+              >
+                {group.exercise}
+              </Typography>
+              <div style={{ display: "flex", flexWrap: "wrap" }}>
+                {group.sets
+                  .sort((a, b) => a.set - b.set) // Sort workouts by set numbers in ascending order
+                  .map((set, setIndex) => (
+                    <div key={setIndex} className="workoutSet">
+                      <Typography
+                        variant="body1"
+                        component="p"
+                        className="setData"
+                      >
+                        <span className="setLabel">Reps:</span>{" "}
+                        {editSetId === set.id ? tempReps : set.reps}
+                      </Typography>
+                      <Typography
+                        variant="body1"
+                        component="p"
+                        className="setData"
+                      >
+                        <span className="setLabel">Weight:</span>{" "}
+                        {editSetId === set.id ? tempWeight : set.weight}
+                      </Typography>
+                      <Tooltip title="Delete Set">
+                        <IconButton
+                          onClick={() => deleteWorkout(set.id)}
+                          aria-label="delete"
+                          sx={{ color: "red" }}
+                        >
+                          <DeleteIcon />
+                        </IconButton>
+                      </Tooltip>
+                      <Tooltip title="Edit Set">
+                        <IconButton
+                          onClick={() => handleEditClick(set)}
+                          aria-label="edit"
+                          sx={{ color: "green" }}
+                        >
+                          <EditIcon />
+                        </IconButton>
+                      </Tooltip>
+                    </div>
+                  ))}
+              </div>
+            </CardContent>
+          </Card>
+        ))}
+
+        <Drawer anchor="right" open={openDrawer} onClose={handleCloseDrawer}>
+          <Notes
+            placeholder="Notes"
+            value={notes}
+            onChange={(e) => setNotes(e.target.value)}
+            rows={4}
+            cols={50}
+            style={{ resize: "none" }}
+          />
+          <div className="drawerContent">
+            {groupedWorkouts.map((group, index) => (
+              <div key={index}>
+                {group.sets.map((set, setIndex) => (
+                  <div key={setIndex}>
+                    <Box>
+                      <Typography variant="body2" component="p">
+                        {set.notes || "No notes available"}
+                      </Typography>
+                    </Box>
+                  </div>
+                ))}
+              </div>
+            ))}
           </div>
-        </CardContent>
-      </Card>
-    ));
+        </Drawer>
+      </div>
+    );
   };
 
   const handleEditClick = (set) => {
@@ -380,6 +443,7 @@ export function Learn() {
           Add Set
         </button>
       </div>
+
       <h1 className="workoutTitle">{workoutTitle}</h1>
       <div>{renderWorkouts()}</div>
       <Modal open={openModal} onClose={handleCancelEdit}>

@@ -21,12 +21,13 @@ import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 import Box from "@mui/material/Box";
 import DeleteIcon from "@mui/icons-material/Delete";
-import { IconButton, Tooltip, Modal } from "@mui/material";
+import { IconButton, Tooltip, Modal, TextField } from "@mui/material";
 import Drawer from "@mui/material/Drawer";
 import EditIcon from "@mui/icons-material/Edit";
 import { styled } from "@mui/system";
 import Notes from "./Notes";
 import { AddNotesButton } from "./AddNotesButton";
+import ExerciseName from "./ExerciseName";
 
 const ModalContainer = styled("div")(({ theme }) => ({
   position: "absolute",
@@ -375,16 +376,20 @@ export function Learn() {
     <div>
       <ResponsiveAppBar />
       <div className="exerciseInputFieldContainer">
-        <input
+        <TextField
+          id="filled-basic"
+          label="Exercise"
+          variant="outlined"
           type="text"
-          placeholder="Exercise"
           value={exercise}
           onChange={(e) => setExercise(e.target.value)}
         />
-        <input
+        <TextField
+          id="filled-basic"
+          label="Reps"
+          variant="outlined"
           ref={repsInputRef}
           type="number"
-          placeholder="Reps"
           value={reps}
           onChange={(e) => {
             const value = parseInt(e.target.value);
@@ -395,9 +400,11 @@ export function Learn() {
           }}
         />
 
-        <input
+        <TextField
+          id="filled-basic"
+          label="Weight(lbs)"
+          variant="outlined"
           type="number"
-          placeholder="Weight"
           value={weight}
           onChange={(e) => {
             const value = parseInt(e.target.value);

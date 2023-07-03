@@ -376,15 +376,20 @@ export function Learn() {
     <div>
       <ResponsiveAppBar />
       <div className="exerciseInputFieldContainer">
-        <TextField
+        {/* <TextField
           id="filled-basic"
           label="Exercise"
           variant="outlined"
           type="text"
           value={exercise}
           onChange={(e) => setExercise(e.target.value)}
+        /> */}
+        <ExerciseName
+          value={exercise}
+          onChange={(e) => setExercise(e.target.value)}
         />
         <TextField
+          sx={{ width: 125 }}
           id="filled-basic"
           label="Reps"
           variant="outlined"
@@ -401,6 +406,7 @@ export function Learn() {
         />
 
         <TextField
+          sx={{ width: 125 }}
           id="filled-basic"
           label="Weight(lbs)"
           variant="outlined"

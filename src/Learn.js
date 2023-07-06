@@ -28,6 +28,7 @@ import { styled } from "@mui/system";
 import Notes from "./Notes";
 import { AddNotesButton } from "./AddNotesButton";
 import ExerciseName from "./ExerciseName";
+import ExerciseHistory from "./ExerciseHistory";
 
 const ModalContainer = styled("div")(({ theme }) => ({
   position: "absolute",
@@ -326,6 +327,11 @@ export function Learn() {
                   ))}
               </div>
             </CardContent>
+            <ExerciseHistory
+              selectedExercise={group.exercise}
+              openDrawer={openDrawer}
+              handleCloseDrawer={handleCloseDrawer}
+            />
           </Card>
         ))}
       </div>

@@ -18,6 +18,8 @@ import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
+import Footer from "../Landing Page/Footer";
+import ResponsiveAppBar from "../Landing Page/ResponsiveAppBar";
 
 function SignUp() {
   const [email, setEmail] = React.useState("");
@@ -68,6 +70,7 @@ function SignUp() {
 
   return (
     <div>
+      <ResponsiveAppBar />
       <Container component="main" maxWidth="xs">
         <CssBaseline />
         <Box

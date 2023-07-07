@@ -24,6 +24,7 @@ import ResponsiveAppBar from "../Landing Page/ResponsiveAppBar";
 import Alert from "@mui/material/Alert";
 import CircularProgress from "@mui/material/CircularProgress";
 import Modal from "@mui/material/Modal";
+import Footer from "../Landing Page/Footer";
 
 function SignIn() {
   const [email, setEmail] = useState("");

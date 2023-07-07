@@ -306,6 +306,7 @@
   margin-left: 12rem;
   margin-right: 10rem;
   margin-top: 2rem;
+  margin-bottom: 2rem;
 }
 
 /* NEED TO MODIFY FOR MOBILE  */
@@ -396,4 +397,14 @@
 .MuiDrawer-paper {
   width: 50%;
   padding: 1rem;
+}
+
+.appContainer {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.calendar {
+  margin-bottom: 2rem;
 }

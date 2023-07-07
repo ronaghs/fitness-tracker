@@ -25,6 +25,7 @@ import {
 import { db, auth } from "../firebaseConfig"; // Update with your Firebase configuration
 import { onAuthStateChanged } from "firebase/auth";
 import { current } from "@reduxjs/toolkit";
+import Footer from "../Landing Page/Footer";
 
 const Calendar = () => {
   const [open, setOpen] = useState(false);
@@ -188,7 +189,7 @@ const Calendar = () => {
   };
 
   return (
-    <div>
+    <div className="calendar">
       <FullCalendar
         key={calendarKey}
         plugins={[dayGridPlugin, interactionPlugin]}
@@ -197,7 +198,7 @@ const Calendar = () => {
         events={events}
         eventContent={eventContent}
         eventClick={handleEventClick} // Handle event click
-        height={"95vh"}
+        height={"90vh"}
       />
 
       <Modal open={open} onClose={handleClose}>

@@ -6,7 +6,7 @@ import { NavLink } from "react-router-dom";
 
 function CallToAction() {
   return (
-    <Box sx={{ "& > :not(style)": { ml: 0, mt: 3 } }}>
+    <Box sx={{ mt: 2 }}>
       <NavLink to="/signup">
         <Fab variant="extended" size="large" color="primary" aria-label="add">
           Get Started

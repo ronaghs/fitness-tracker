@@ -18,8 +18,13 @@ import { auth } from "../firebaseConfig";
 import Snackbar from "@mui/material/Snackbar";
 import Alert from "@mui/material/Alert";
 import Notes from "../Notes";
+import Calendar from "../Dashboard";
+import ProgressCharts from "../Charts/WeightChart";
 
-const pages = ["Overview", "Why Track?"];
+const pages = [
+  { label: "Calendar", path: "/dashboard" },
+  { label: "Progress Charts", path: "/graphs" },
+];
 const settings = ["Profile", "Account", "Dashboard", "Logout"];
 
 function ResponsiveAppBar() {
@@ -118,8 +123,13 @@ function ResponsiveAppBar() {
               }}
             >
               {pages.map((page) => (
-                <MenuItem key={page} onClick={handleCloseNavMenu}>
-                  <Typography textAlign="center">{page}</Typography>
+                <MenuItem
+                  key={page.label}
+                  component={NavLink}
+                  to={page.path}
+                  onClick={handleCloseNavMenu}
+                >
+                  <Typography textAlign="center">{page.label}</Typography>
                 </MenuItem>
               ))}
             </Menu>
@@ -144,15 +154,21 @@ function ResponsiveAppBar() {
             ElevateExcellence
           </Typography>
           <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
-            {pages.map((page) => (
-              <Button
-                key={page}
-                onClick={handleCloseNavMenu}
-                sx={{ my: 2, color: "white", display: "block" }}
-              >
-                {page}
-              </Button>
-            ))}
+            {pages.map(
+              (page) =>
+                // Conditionally render the button for "Calendar" and "Progress Charts" based on login status
+                loggedIn && (
+                  <Button
+                    key={page.label}
+                    component={NavLink}
+                    to={page.path}
+                    activeClassName="active"
+                    sx={{ my: 2, color: "white", display: "block" }}
+                  >
+                    {page.label}
+                  </Button>
+                )
+            )}
           </Box>
 
           <Box className="accountIcon">

@@ -6,6 +6,7 @@ import ExerciseName from "../ExerciseName";
 import ExerciseHistory from "../ExerciseHistory";
 import ResponsiveAppBar from "../Landing Page/ResponsiveAppBar";
 import { Box, Typography } from "@mui/material";
+import Footer from "../Landing Page/Footer";
 
 const ApexChart = () => {
   const [selectedExercise, setSelectedExercise] = useState("");

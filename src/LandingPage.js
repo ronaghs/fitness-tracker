@@ -8,10 +8,12 @@ import Divider from "./Landing Page/Divider";
 import calendar from "./Images/calendar.png";
 import log from "./Images/log.png";
 import graph from "./Images/graph.png";
+import Footer from "./Landing Page/Footer";
+import { Box } from "@mui/material";
 
 function LandingPage() {
   return (
-    <div>
+    <Box>
       <ResponsiveAppBar />
       <Greeting />
       <Divider />
@@ -36,7 +38,7 @@ function LandingPage() {
         subtitle1="Push your limits and"
         subtitle2="observe your progress "
       />
-    </div>
+    </Box>
   );
 }
 

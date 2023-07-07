@@ -6,6 +6,7 @@ import SignUp from "./SignIn/SignUp";
 import Dashboard from "./Dashboard";
 import { Learn } from "./Learn";
 import Notes from "./Notes";
+import ProgressCharts from "./ProgressCharts";
 function App() {
   return (
     <Router>
@@ -16,6 +17,7 @@ function App() {
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/learn/:date/*" element={<Learn />} />
         <Route path="/notes*" element={<Notes />} />
+        <Route path="/graphs" element={<ProgressCharts />} />
       </Routes>
     </Router>
   );

@@ -25,6 +25,7 @@ import Alert from "@mui/material/Alert";
 import CircularProgress from "@mui/material/CircularProgress";
 import Modal from "@mui/material/Modal";
 import Footer from "../Landing Page/Footer";
+import { motion } from "framer-motion";
 
 function SignIn() {
   const [email, setEmail] = useState("");
@@ -70,7 +71,12 @@ function SignIn() {
   };
 
   return (
-    <div>
+    <motion.div
+      initial={{ opacity: 0, y: "100%" }} // Initial state
+      animate={{ opacity: 1, y: "0%" }} // Animation state
+      exit={{ opacity: 0, y: "-100%" }} // Exit state
+      transition={{ duration: 1, ease: [0.43, 0.13, 0.23, 0.96] }}
+    >
       <ResponsiveAppBar />
       <ThemeProvider theme={createTheme()}>
         <Container component="main" maxWidth="xs">
@@ -189,7 +195,7 @@ function SignIn() {
           )}
         </Box>
       </Modal>
-    </div>
+    </motion.div>
   );
 }
 

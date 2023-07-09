@@ -29,6 +29,7 @@ import Notes from "./Notes";
 import { AddNotesButton } from "./AddNotesButton";
 import ExerciseName from "./ExerciseName";
 import ExerciseHistory from "./ExerciseHistory";
+import { motion } from "framer-motion";
 
 const ModalContainer = styled("div")(({ theme }) => ({
   position: "absolute",
@@ -379,7 +380,12 @@ export function Learn() {
   };
 
   return (
-    <div>
+    <motion.div
+      initial={{ opacity: 0, y: "100%" }} // Initial state
+      animate={{ opacity: 1, y: "0%" }} // Animation state
+      exit={{ opacity: 0, y: "-100%" }} // Exit state
+      transition={{ duration: 1, ease: [0.43, 0.13, 0.23, 0.96] }}
+    >
       <ResponsiveAppBar />
       <div className="exerciseInputFieldContainer">
         {/* <TextField
@@ -479,6 +485,6 @@ export function Learn() {
           </Box>
         </Box>
       </Modal>
-    </div>
+    </motion.div>
   );
 }

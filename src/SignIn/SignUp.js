@@ -20,6 +20,7 @@ import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import Footer from "../Landing Page/Footer";
 import ResponsiveAppBar from "../Landing Page/ResponsiveAppBar";
+import { motion } from "framer-motion";
 
 function SignUp() {
   const [email, setEmail] = React.useState("");
@@ -69,7 +70,7 @@ function SignUp() {
   };
 
   return (
-    <div>
+    <motion.div>
       <ResponsiveAppBar />
       <Container component="main" maxWidth="xs">
         <CssBaseline />
@@ -183,7 +184,7 @@ function SignUp() {
           </Typography>
         </Box>
       </Modal>
-    </div>
+    </motion.div>
   );
 }
 

@@ -61,7 +61,7 @@ function ResponsiveAppBar() {
       await signOut(auth);
       setShowLogoutConfirmation(true);
       setTimeout(() => {
-        navigate("/signin");
+        navigate("/");
       }, 1500); // Delay before redirecting to signin page
     } catch (err) {
       console.error(err);
@@ -69,7 +69,7 @@ function ResponsiveAppBar() {
   };
 
   return (
-    <AppBar position="static">
+    <AppBar id="navbar" position="static">
       <Container maxWidth="xlg">
         <Toolbar className="toolBar" disableGutters>
           <FitnessCenterIcon

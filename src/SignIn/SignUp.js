@@ -66,11 +66,16 @@ function SignUp() {
 
   const handleCloseModal = () => {
     setSuccessModalOpen(false);
-    navigate("/signin");
+    navigate("/dashboard");
   };
 
   return (
-    <motion.div>
+    <motion.div
+      initial={{ opacity: 0, y: "100%" }} // Initial state
+      animate={{ opacity: 1, y: "0%" }} // Animation state
+      exit={{ opacity: 0, y: "-100%" }} // Exit state
+      transition={{ duration: 1, ease: [0.43, 0.13, 0.23, 0.96] }}
+    >
       <ResponsiveAppBar />
       <Container component="main" maxWidth="xs">
         <CssBaseline />
@@ -180,7 +185,7 @@ function SignUp() {
         >
           <CircularProgress sx={{ color: "green", mb: 2 }} />
           <Typography variant="h6" component="h2" align="center">
-            Account created! Redirecting you to the sign-in page.
+            Creating your account. One moment.
           </Typography>
         </Box>
       </Modal>

@@ -7,7 +7,6 @@ import Dashboard from "../Dashboard";
 import { Learn } from "../Learn";
 import Notes from "../Notes";
 import ProgressCharts from "../ProgressCharts";
-import ExerciseLibrary from "../ExerciseLibrary";
 import { AnimatePresence } from "framer-motion";
 
 function AnimatedRoutes() {
@@ -23,7 +22,6 @@ function AnimatedRoutes() {
         <Route path="/learn/:date/*" element={<Learn />} />
         <Route path="/notes*" element={<Notes />} />
         <Route path="/graphs" element={<ProgressCharts />} />
-        <Route path="/exerciselibrary" element={<ExerciseLibrary />} />
       </Routes>
     </AnimatePresence>
   );

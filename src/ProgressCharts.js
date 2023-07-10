@@ -14,6 +14,7 @@ const ExercisePage = () => {
 
   return (
     <motion.div
+      className="appContainer"
       initial={{ opacity: 0, y: "100%" }} // Initial state
       animate={{ opacity: 1, y: "0%" }} // Animation state
       exit={{ opacity: 0, y: "-100%" }} // Exit state

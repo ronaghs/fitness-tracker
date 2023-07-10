@@ -8,7 +8,7 @@ function Greeting() {
   return (
     <div className="greetingContainer">
       <div className="greeting">
-        <Typography variant="h2">
+        <Typography fontSize={"5rem"}>
           <span>
             <b>Elevate</b>
           </span>{" "}
@@ -20,12 +20,12 @@ function Greeting() {
             <b>excellence</b>
           </span>{" "}
         </Typography>
-        <Typography variant="h6" gutterButtom>
+        <Typography variant="h5" gutterButtom>
           Track. Progress. Elevate. Unleash your potential.
         </Typography>
         <CallToAction />
       </div>
-      <img className="smartphonecss" src={smartphone} alt="Smartphone" />
+      {/* <img className="smartphonecss" src={smartphone} alt="Smartphone" /> */}
     </div>
   );
 }

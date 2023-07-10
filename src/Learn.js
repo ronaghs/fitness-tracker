@@ -287,9 +287,15 @@ export function Learn() {
               </Typography>
               <div style={{ display: "flex", flexWrap: "wrap" }}>
                 {group.sets
-                  .sort((a, b) => a.set - b.set) // Sort workouts by set numbers in ascending order
+                  .sort((a, b) => a.set - b.set)
                   .map((set, setIndex) => (
-                    <div key={setIndex} className="workoutSet">
+                    <motion.div
+                      key={setIndex}
+                      initial={{ opacity: 0, y: -100 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ duration: 0.5, delay: setIndex * 0.1 }}
+                      className="workoutSet"
+                    >
                       <Typography
                         variant="body1"
                         component="p"
@@ -324,7 +330,7 @@ export function Learn() {
                           <EditIcon />
                         </IconButton>
                       </Tooltip>
-                    </div>
+                    </motion.div>
                   ))}
               </div>
             </CardContent>

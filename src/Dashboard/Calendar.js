@@ -26,6 +26,7 @@ import { db, auth } from "../firebaseConfig"; // Update with your Firebase confi
 import { onAuthStateChanged } from "firebase/auth";
 import { current } from "@reduxjs/toolkit";
 import Footer from "../Landing Page/Footer";
+import { motion } from "framer-motion";
 
 const Calendar = () => {
   const [open, setOpen] = useState(false);
@@ -188,6 +189,12 @@ const Calendar = () => {
     setCalendarKey(Date.now());
   };
 
+  const modalAnimation = {
+    hidden: { opacity: 0, scale: 0.8 },
+    visible: { opacity: 1, scale: 1 },
+    exit: { opacity: 0, scale: 0.8 },
+  };
+
   return (
     <div className="calendar">
       <FullCalendar
@@ -202,44 +209,54 @@ const Calendar = () => {
       />
 
       <Modal open={open} onClose={handleClose}>
-        <Box
-          sx={{
-            position: "absolute",
-            top: "50%",
-            left: "50%",
-            transform: "translate(-50%, -50%)",
-            bgcolor: "white",
-            borderRadius: "8px",
-            boxShadow: 24,
-            p: 4,
+        <motion.div
+          initial="hidden"
+          animate={open ? "visible" : "hidden"}
+          exit="exit"
+          variants={modalAnimation}
+          transition={{ duration: 0.5 }}
+          style={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            height: "100%",
           }}
         >
-          <Typography variant="h5" mb={2}>
-            Add Event
-          </Typography>
-          <TextField
-            label="Event Title"
-            value={eventTitle}
-            onChange={(e) => setEventTitle(e.target.value)}
-            sx={{ mb: 2 }}
-          />
-          <Button
-            onClick={handleAddEvent}
-            variant="contained"
-            color="primary"
-            disabled={!eventTitle}
+          <Box
+            sx={{
+              bgcolor: "white",
+              borderRadius: "8px",
+              boxShadow: 24,
+              p: 4,
+            }}
           >
-            Add and Go
-          </Button>
-          <Button
-            onClick={handleClose}
-            variant="contained"
-            color="error"
-            ml={2}
-          >
-            Cancel
-          </Button>
-        </Box>
+            <Typography variant="h5" mb={2}>
+              Add Workout
+            </Typography>
+            <TextField
+              label="Event Title"
+              value={eventTitle}
+              onChange={(e) => setEventTitle(e.target.value)}
+              sx={{ mb: 2 }}
+            />
+            <Button
+              onClick={handleAddEvent}
+              variant="contained"
+              color="primary"
+              disabled={!eventTitle}
+            >
+              Let's go
+            </Button>
+            <Button
+              onClick={handleClose}
+              variant="contained"
+              color="error"
+              ml={2}
+            >
+              Cancel
+            </Button>
+          </Box>
+        </motion.div>
       </Modal>
     </div>
   );

@@ -5,7 +5,7 @@ import Typography from "@mui/material/Typography";
 const Footer = () => {
   return (
     <Box
-      component="footer"
+      className="footer"
       mt="auto"
       sx={{
         bgcolor: "primary.main",

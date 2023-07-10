@@ -22,30 +22,36 @@ function LandingPage() {
       transition={{ duration: 0.75, ease: [0.43, 0.13, 0.23, 0.96] }}
     >
       <Box>
-        <ResponsiveAppBar />
-        <Greeting />
-        <Divider />
-        <InfoStack
-          imageSrc={calendar}
-          altText="Showing the calendar functionality of the site. Allowing you to plan workouts ahead and stay on track with your fitness goals."
-          title="Think Ahead"
-          subtitle1="Plan and organize workouts,"
-          subtitle2="stay on track."
-        />
-        <InvertedInfoStack
-          imageSrc={log}
-          altText="Showing the calendar functionality of the site. Allowing you to plan workouts ahead and stay on track with your fitness goals."
-          title="Track Workouts"
-          subtitle1="Detailed record of your training sessions"
-          subtitle2="to help hit your goals."
-        />
-        <InfoStack
-          imageSrc={graph}
-          altText="Showing the calendar functionality of the site. Allowing you to plan workouts ahead and stay on track with your fitness goals."
-          title="View Progress"
-          subtitle1="Push your limits and"
-          subtitle2="observe your progress "
-        />
+        <Box className="bgImg1">
+          <ResponsiveAppBar />
+          <Greeting />
+        </Box>
+
+        <Box className="bgImg2">
+          <Divider />
+
+          <InfoStack
+            imageSrc={calendar}
+            altText="Showing the calendar functionality of the site. Allowing you to plan workouts ahead and stay on track with your fitness goals."
+            title="Think Ahead"
+            subtitle1="Plan and organize workouts,"
+            subtitle2="stay on track."
+          />
+          <InvertedInfoStack
+            imageSrc={log}
+            altText="Showing the calendar functionality of the site. Allowing you to plan workouts ahead and stay on track with your fitness goals."
+            title="Track Workouts"
+            subtitle1="Detailed record of your training sessions"
+            subtitle2="to help hit your goals."
+          />
+          <InfoStack
+            imageSrc={graph}
+            altText="Showing the calendar functionality of the site. Allowing you to plan workouts ahead and stay on track with your fitness goals."
+            title="View Progress"
+            subtitle1="Push your limits and"
+            subtitle2="observe your progress "
+          />
+        </Box>
       </Box>
     </motion.div>
   );

@@ -59,7 +59,9 @@ export function Learn() {
   const repsInputRef = useRef(null);
 
   const pathname = window.location.pathname;
-  const workoutTitle = decodeURIComponent(pathname.split("/")[3]);
+  const workoutTitle = decodeURIComponent(
+    pathname.split("/").slice(3).join("/")
+  );
   console.log(workoutTitle);
 
   useEffect(() => {
@@ -249,7 +251,7 @@ export function Learn() {
             left: "50%",
             transform: "translate(-50%, -50%)",
             textAlign: "center",
-            marginTop: "50px",
+            marginTop: "15rem",
           }}
         >
           <h3>Add a set to start tracking</h3>
@@ -301,7 +303,7 @@ export function Learn() {
                         component="p"
                         className="setData"
                       >
-                        <span className="setLabel">Reps:</span>{" "}
+                        <span className="setLabel">Repitions:</span>{" "}
                         {editSetId === set.id ? tempReps : set.reps}
                       </Typography>
                       <Typography
@@ -309,7 +311,7 @@ export function Learn() {
                         component="p"
                         className="setData"
                       >
-                        <span className="setLabel">Weight:</span>{" "}
+                        <span className="setLabel">Weight(lbs):</span>{" "}
                         {editSetId === set.id ? tempWeight : set.weight}
                       </Typography>
                       <Tooltip title="Delete Set">
@@ -360,28 +362,49 @@ export function Learn() {
   };
 
   const handleSaveEdit = async () => {
-    try {
-      const user = auth.currentUser;
-      if (user) {
-        const workoutDocRef = doc(db, "users", user.uid, "workouts", editSetId);
-        await updateDoc(workoutDocRef, {
-          reps: tempReps,
-          weight: tempWeight,
-        });
-        setWorkouts((prevWorkouts) =>
-          prevWorkouts.map((workout) =>
-            workout.id === editSetId
-              ? { ...workout, reps: tempReps, weight: tempWeight }
-              : workout
-          )
-        );
-        setEditSetId("");
-        setTempReps("");
-        setTempWeight("");
-        setOpenModal(false);
+    const validateAndSaveEdit = async () => {
+      // Validate the inputs
+      if (tempReps >= 0 && tempWeight >= 0) {
+        try {
+          // Save the edit
+          const user = auth.currentUser;
+          if (user) {
+            const workoutDocRef = doc(
+              db,
+              "users",
+              user.uid,
+              "workouts",
+              editSetId
+            );
+            await updateDoc(workoutDocRef, {
+              reps: tempReps,
+              weight: tempWeight,
+            });
+            setWorkouts((prevWorkouts) =>
+              prevWorkouts.map((workout) =>
+                workout.id === editSetId
+                  ? { ...workout, reps: tempReps, weight: tempWeight }
+                  : workout
+              )
+            );
+            setEditSetId("");
+            setTempReps("");
+            setTempWeight("");
+            setOpenModal(false);
+          }
+        } catch (error) {
+          console.error("Error updating workout: ", error);
+        }
       }
-    } catch (error) {
-      console.error("Error updating workout: ", error);
+    };
+
+    // Validate and save the edit
+    validateAndSaveEdit();
+  };
+
+  const handleKeyPress = (event) => {
+    if (event.key === "Enter") {
+      addWorkout();
     }
   };
 
@@ -421,6 +444,7 @@ export function Learn() {
               setReps(e.target.value);
             }
           }}
+          onKeyDown={handleKeyPress} // Call addWorkout when Enter key is pressed
         />
 
         <TextField
@@ -437,6 +461,7 @@ export function Learn() {
               setWeight(e.target.value);
             }
           }}
+          onKeyDown={handleKeyPress} // Call addWorkout when Enter key is pressed
         />
         <button className="addSetButton" onClick={addWorkout}>
           Add Set

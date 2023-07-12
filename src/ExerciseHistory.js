@@ -5,6 +5,7 @@ import Button from "@mui/material/Button";
 import Drawer from "@mui/material/Drawer";
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
+import Divider from "@mui/material/Divider";
 
 const ExerciseHistory = ({
   selectedExercise,
@@ -93,7 +94,7 @@ const ExerciseHistory = ({
                   >
                     <Box marginTop={0.25}>Date: {date}</Box>
                   </Typography>
-
+                  <Divider variant="left" />{" "}
                   {sets
                     .sort((a, b) => a.set - b.set) // Sort sets by set number
                     .map((set, setIndex) => (

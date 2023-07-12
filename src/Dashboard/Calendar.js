@@ -234,7 +234,7 @@ const Calendar = () => {
               Add Workout
             </Typography>
             <TextField
-              label="Event Title"
+              label="Workout name"
               value={eventTitle}
               onChange={(e) => setEventTitle(e.target.value)}
               sx={{ mb: 2 }}

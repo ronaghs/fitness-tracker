@@ -21,6 +21,7 @@ import { createTheme, ThemeProvider } from "@mui/material/styles";
 import Footer from "../Landing Page/Footer";
 import ResponsiveAppBar from "../Landing Page/ResponsiveAppBar";
 import { motion } from "framer-motion";
+import { FaDumbbell } from "react-icons/fa6";
 
 function SignUp() {
   const [email, setEmail] = React.useState("");
@@ -87,8 +88,26 @@ function SignUp() {
             alignItems: "center",
           }}
         >
-          <Avatar sx={{ m: 1, bgcolor: "secondary.main" }}>
-            <LockOutlinedIcon />
+          <Avatar
+            sx={{
+              backgroundImage:
+                "linear-gradient(to left, #644fd5, #6aabe2, #c865d4)",
+            }}
+          >
+            <motion.div
+              style={{ margin: "auto" }}
+              animate={{
+                y: [-8, 8],
+              }}
+              transition={{
+                duration: 2,
+                repeat: Infinity, // Repeat the animation indefinitely
+                repeatType: "reverse", // Reverse the animation on each repeat
+                ease: "easeInOut", // Easing function for smooth animation
+              }}
+            >
+              <FaDumbbell />
+            </motion.div>
           </Avatar>
           <Typography component="h1" variant="h5">
             Sign up

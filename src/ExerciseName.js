@@ -43,9 +43,8 @@ export default function ExerciseName(props) {
 }
 
 const exercises = [
-  { name: "Curl" },
-  { name: "Squat" },
-  { name: "Bench" },
+  { name: "Barbell Squat" },
+  { name: "Bench Press" },
   { name: "Deadlift" },
   { name: "Pull-up" },
   { name: "Push-up" },

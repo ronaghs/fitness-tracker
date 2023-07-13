@@ -73,9 +73,9 @@ const Calendar = () => {
     const existingEvent = events.find((event) => event.date === clickedDate);
 
     if (existingEvent) {
-      // An event already exists for the clicked date, navigate to the "Learn" component
+      // An event already exists for the clicked date, navigate to the trackingpage component
       navigate(
-        `/learn/${clickedDate}/${encodeURIComponent(existingEvent.title)}`
+        `/log/${clickedDate}/${encodeURIComponent(existingEvent.title)}`
       );
     } else {
       setSelectedDate(clickedDate);
@@ -89,7 +89,7 @@ const Calendar = () => {
   };
 
   const handleAddEvent = async () => {
-    const maxLength = 20; // Maximum number of characters for the event title
+    const maxLength = 30; // Maximum number of characters for the event title
     let truncatedTitle = eventTitle;
 
     if (eventTitle.length > maxLength) {
@@ -99,9 +99,9 @@ const Calendar = () => {
     const existingEvent = events.find((event) => event.date === selectedDate);
 
     if (existingEvent) {
-      // An event already exists for the selected date, navigate to the "Learn" component
+      // An event already exists for the selected date, navigate to the trackingpage component
       navigate(
-        `/learn/${selectedDate}/${encodeURIComponent(existingEvent.title)}`
+        `/log/${selectedDate}/${encodeURIComponent(existingEvent.title)}`
       );
       handleClose();
       return;
@@ -128,10 +128,10 @@ const Calendar = () => {
       await addDoc(workoutsCollectionRef, event);
       handleClose();
 
-      // Redirect to Learn component for the new event after a brief delay
+      // Redirect to trackingpage component for the new event after a brief delay
       setTimeout(() => {
         navigate(
-          `/learn/${selectedDate}/${encodeURIComponent(event.title)}` // Pass event title as a URL parameter
+          `/log/${selectedDate}/${encodeURIComponent(event.title)}` // Pass event title as a URL parameter
         );
       }, 500); // 0.5 second delay before redirected
     } catch (error) {
@@ -163,24 +163,22 @@ const Calendar = () => {
 
     if (eventDate && clickedEvent.title) {
       const clickedDate = eventDate.toISOString().split("T")[0];
-      navigate(
-        `/learn/${clickedDate}/${encodeURIComponent(clickedEvent.title)}`
-      );
+      navigate(`/log/${clickedDate}/${encodeURIComponent(clickedEvent.title)}`);
     }
   };
 
   const eventContent = (eventInfo) => {
     return (
-      <div style={{ display: "flex", alignItems: "center" }}>
-        <Typography style={{ marginRight: "auto" }}>
-          {eventInfo.event.title}
-        </Typography>
-        <IconButton
-          sx={{ color: "red" }}
-          onClick={(event) => handleDeleteEvent(eventInfo.event.id, event)}
-        >
-          <DeleteIcon />
-        </IconButton>
+      <div className="event-container">
+        <div className="event-wrapper">
+          <Typography>{eventInfo.event.title}</Typography>
+          <IconButton
+            sx={{ color: "red" }}
+            onClick={(event) => handleDeleteEvent(eventInfo.event.id, event)}
+          >
+            <DeleteIcon />
+          </IconButton>
+        </div>
       </div>
     );
   };

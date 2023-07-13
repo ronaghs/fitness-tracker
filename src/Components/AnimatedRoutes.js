@@ -4,7 +4,7 @@ import LandingPage from "../LandingPage";
 import SignIn from "../SignIn/SignIn";
 import SignUp from "../SignIn/SignUp";
 import Dashboard from "../Dashboard";
-import { Learn } from "../Learn";
+import { TrackingPage } from "../TrackingPage";
 import Notes from "../Notes";
 import ProgressCharts from "../ProgressCharts";
 import { AnimatePresence } from "framer-motion";
@@ -19,7 +19,7 @@ function AnimatedRoutes() {
         <Route path="/signin" element={<SignIn />} />
         <Route path="/signup" element={<SignUp />} />
         <Route path="/dashboard" element={<Dashboard />} />
-        <Route path="/learn/:date/*" element={<Learn />} />
+        <Route path="/log/:date/*" element={<TrackingPage />} />
         <Route path="/notes*" element={<Notes />} />
         <Route path="/graphs" element={<ProgressCharts />} />
       </Routes>

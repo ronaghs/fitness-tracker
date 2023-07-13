@@ -68,6 +68,8 @@ function ResponsiveAppBar() {
     }
   };
 
+  const isMobileDevice = /Mobi/i.test(window.navigator.userAgent);
+
   return (
     <AppBar id="navbar" position="static">
       <Container maxWidth="xlg">
@@ -94,16 +96,18 @@ function ResponsiveAppBar() {
           </Typography>
 
           <Box sx={{ flexGrow: 1, display: { xs: "flex", md: "none" } }}>
-            <IconButton
-              size="large"
-              aria-label="account of current user"
-              aria-controls="menu-appbar"
-              aria-haspopup="true"
-              onClick={handleOpenNavMenu}
-              color="inherit"
-            >
-              <MenuIcon />
-            </IconButton>
+            {loggedIn && (
+              <IconButton
+                size="large"
+                aria-label="account of current user"
+                aria-controls="menu-appbar"
+                aria-haspopup="true"
+                onClick={handleOpenNavMenu}
+                color="inherit"
+              >
+                <MenuIcon />
+              </IconButton>
+            )}
             <Menu
               id="menu-appbar"
               anchorEl={anchorElNav}
@@ -174,6 +178,7 @@ function ResponsiveAppBar() {
           <Box className="accountIcon">
             {loggedIn ? (
               <Button
+                id="logoutButton"
                 variant="outlined"
                 color="inherit"
                 onClick={handleLogout}

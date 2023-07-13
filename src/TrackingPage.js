@@ -43,7 +43,7 @@ const ModalContainer = styled("div")(({ theme }) => ({
   padding: theme.spacing(2, 4, 3),
 }));
 
-export function Learn() {
+export function TrackingPage() {
   const { date, eventTitle } = useParams();
   const [workouts, setWorkouts] = useState([]);
   const [exercise, setExercise] = useState("");
@@ -270,7 +270,7 @@ export function Learn() {
     };
 
     return (
-      <div>
+      <Box>
         <Notes date={date} />
         {groupedWorkouts.map((group, index) => (
           <Card key={index} className="exerciseCard">
@@ -343,7 +343,7 @@ export function Learn() {
             />
           </Card>
         ))}
-      </div>
+      </Box>
     );
   };
 

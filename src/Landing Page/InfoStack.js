@@ -33,8 +33,12 @@ function InfoStack({ imageSrc, altText, title, subtitle1, subtitle2 }) {
         <Typography id="infoTitle" variant="h3">
           {title}
         </Typography>
-        <Typography variant="h6">{subtitle1}</Typography>
-        <Typography variant="h6">{subtitle2}</Typography>
+        <Typography id="infoSubtitle" variant="h6">
+          {subtitle1}
+        </Typography>
+        <Typography id="infoSubtitle" variant="h6">
+          {subtitle2}
+        </Typography>
       </div>
       <img
         ref={infoImageRef}

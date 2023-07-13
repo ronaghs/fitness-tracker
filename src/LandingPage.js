@@ -9,6 +9,7 @@ import Divider from "./Landing Page/Divider";
 import calendar from "./Images/calendar.png";
 import log from "./Images/log.png";
 import graph from "./Images/graph.png";
+
 import Footer from "./Landing Page/Footer";
 import { Box } from "@mui/material";
 import { motion } from "framer-motion";

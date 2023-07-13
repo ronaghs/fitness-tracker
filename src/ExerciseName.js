@@ -12,7 +12,7 @@ export default function ExerciseName(props) {
   };
 
   return (
-    <Stack spacing={2} sx={{ width: 300 }}>
+    <Stack id="exerciseNameInput" spacing={2} sx={{ width: 300 }}>
       <Autocomplete
         onChange={handleChange}
         value={value}

@@ -3,6 +3,7 @@ import { motion } from "framer-motion";
 import "../styles.css";
 import Typography from "@mui/material/Typography";
 import CallToAction from "./CallToAction";
+import Box from "@mui/material/Box";
 
 function Greeting() {
   const greetingVariants = {
@@ -28,8 +29,8 @@ function Greeting() {
   };
 
   return (
-    <div className="greetingContainer">
-      <div className="greeting">
+    <Box className="greetingContainer">
+      <Box className="greeting">
         <motion.div
           initial="hidden"
           animate="visible"
@@ -49,13 +50,13 @@ function Greeting() {
           </Typography>
         </motion.div>
         <motion.div initial="hidden" animate="visible" variants={trackVariants}>
-          <Typography variant="h5" gutterBottom>
+          <Typography variant="h5">
             Track. Progress. Elevate. Unleash your potential.
           </Typography>
         </motion.div>
         <CallToAction />
-      </div>
-    </div>
+      </Box>
+    </Box>
   );
 }
 

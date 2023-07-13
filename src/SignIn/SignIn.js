@@ -8,28 +8,20 @@ import Checkbox from "@mui/material/Checkbox";
 import Link from "@mui/material/Link";
 import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
-import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { useState } from "react";
-import {
-  signInWithEmailAndPassword,
-  signOut,
-  signInWithPopup,
-} from "firebase/auth";
-import { auth, googleProvider } from "../firebaseConfig";
+import { signInWithEmailAndPassword, signInWithPopup } from "firebase/auth";
+import { auth, googleProvider } from "../firebase/firebaseConfig";
 import { NavLink, useNavigate } from "react-router-dom";
 import ResponsiveAppBar from "../Landing Page/ResponsiveAppBar";
 import Alert from "@mui/material/Alert";
 import CircularProgress from "@mui/material/CircularProgress";
 import Modal from "@mui/material/Modal";
-import Footer from "../Landing Page/Footer";
 import { motion } from "framer-motion";
 import { FcGoogle } from "react-icons/fc";
-import FitnessCenterIcon from "@mui/icons-material/FitnessCenter";
 import { FaDumbbell } from "react-icons/fa6";
-
 function SignIn() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -44,15 +36,10 @@ function SignIn() {
     event.preventDefault();
     setError(null);
     setLoading(true);
-    setModalOpen(true);
 
     try {
       await signInWithEmailAndPassword(auth, email, password);
-      setTimeout(() => {
-        setLoading(false);
-        setModalOpen(false);
-        navigate("/dashboard");
-      }, 2000); // Delay navigation for 2 seconds
+      navigate("/dashboard");
     } catch (err) {
       console.error(err);
       setError("Invalid email or password");
@@ -65,19 +52,26 @@ function SignIn() {
   };
 
   const signInWithGoogle = async () => {
+    setError(null);
+    setLoading(true);
+    setModalOpen(true);
+
     try {
       await signInWithPopup(auth, googleProvider);
-      navigate("/dashboard"); // Redirect to the dashboard
+      navigate("/dashboard");
     } catch (err) {
       console.error(err);
+      setError("Google sign-in failed");
+      setLoading(false);
+      setModalOpen(false);
     }
   };
 
   return (
     <motion.div
-      initial={{ opacity: 0, y: "100%" }} // Initial state
-      animate={{ opacity: 1, y: "0%" }} // Animation state
-      exit={{ opacity: 0, y: "-100%" }} // Exit state
+      initial={{ opacity: 0, y: "100%" }}
+      animate={{ opacity: 1, y: "0%" }}
+      exit={{ opacity: 0, y: "-100%" }}
       transition={{ duration: 1, ease: [0.43, 0.13, 0.23, 0.96] }}
     >
       <ResponsiveAppBar />
@@ -105,9 +99,9 @@ function SignIn() {
                 }}
                 transition={{
                   duration: 2,
-                  repeat: Infinity, // Repeat the animation indefinitely
-                  repeatType: "reverse", // Reverse the animation on each repeat
-                  ease: "easeInOut", // Easing function for smooth animation
+                  repeat: Infinity,
+                  repeatType: "reverse",
+                  ease: "easeInOut",
                 }}
               >
                 <FaDumbbell />
@@ -173,9 +167,10 @@ function SignIn() {
               </Button>
               <Grid container>
                 <Grid item xs>
-                  <Link href="#" variant="body2">
+                  {/* NO LOGIC FOR PASSWORD RECOVERY AT THE MOMENT */}
+                  {/* <Link href="#" variant="body2">
                     Forgot password?
-                  </Link>
+                  </Link> */}
                 </Grid>
                 <Grid item>
                   <NavLink to="/signup">
@@ -212,11 +207,7 @@ function SignIn() {
             alignItems: "center",
           }}
         >
-          {loading ? (
-            <CircularProgress sx={{ color: "blue" }} />
-          ) : (
-            <Alert severity="error">Invalid email or password</Alert>
-          )}
+          <CircularProgress sx={{ color: "blue" }} />
         </Box>
       </Modal>
     </motion.div>

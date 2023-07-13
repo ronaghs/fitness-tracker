@@ -5,7 +5,7 @@ import SignIn from "../SignIn/SignIn";
 import SignUp from "../SignIn/SignUp";
 import Dashboard from "../Dashboard";
 import { TrackingPage } from "../TrackingPage";
-import Notes from "../Notes";
+import Notes from "./Tracking Page Compnents/Notes";
 import ProgressCharts from "../ProgressCharts";
 import { AnimatePresence } from "framer-motion";
 

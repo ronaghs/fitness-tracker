@@ -1,12 +1,11 @@
 import React, { useState, useEffect } from "react";
 import ReactApexChart from "react-apexcharts";
 import { collection, getDocs, query, where, orderBy } from "firebase/firestore";
-import { db, auth } from "../firebaseConfig";
-import ExerciseName from "../ExerciseName";
-import ExerciseHistory from "../ExerciseHistory";
+import { db, auth } from "../firebase/firebaseConfig";
+import ExerciseName from "../Components/Tracking Page Compnents/ExerciseName";
+import ExerciseHistory from "../Components/Tracking Page Compnents/ExerciseHistory";
 import ResponsiveAppBar from "../Landing Page/ResponsiveAppBar";
 import { Box, Typography } from "@mui/material";
-import Footer from "../Landing Page/Footer";
 
 const ApexChart = () => {
   const [selectedExercise, setSelectedExercise] = useState("");

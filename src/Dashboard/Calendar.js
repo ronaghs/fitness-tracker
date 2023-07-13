@@ -16,16 +16,14 @@ import {
   addDoc,
   collection,
   doc,
-  serverTimestamp,
   onSnapshot,
   deleteDoc,
   query,
   where,
 } from "firebase/firestore";
-import { db, auth } from "../firebaseConfig"; // Update with your Firebase configuration
+import { db, auth } from "../firebase/firebaseConfig";
 import { onAuthStateChanged } from "firebase/auth";
-import { current } from "@reduxjs/toolkit";
-import Footer from "../Landing Page/Footer";
+
 import { motion } from "framer-motion";
 
 const Calendar = () => {
@@ -33,7 +31,6 @@ const Calendar = () => {
   const [eventTitle, setEventTitle] = useState("");
   const [selectedDate, setSelectedDate] = useState(null);
   const [events, setEvents] = useState([]);
-  const [eventIdCounter, setEventIdCounter] = useState(1);
   const [calendarKey, setCalendarKey] = useState(Date.now());
   const navigate = useNavigate();
 
@@ -181,10 +178,6 @@ const Calendar = () => {
         </div>
       </div>
     );
-  };
-
-  const reloadCalendar = () => {
-    setCalendarKey(Date.now());
   };
 
   const modalAnimation = {

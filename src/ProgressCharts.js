@@ -1,8 +1,7 @@
 // ExercisePage.js
 import React, { useState } from "react";
-import ExerciseName from "./ExerciseName";
+import ExerciseName from "./Components/Tracking Page Compnents/ExerciseName";
 import WeightChart from "./Charts/WeightChart";
-import VolumeChart from "./Charts/VolumeChart";
 import { motion } from "framer-motion";
 
 const ExercisePage = () => {
@@ -21,7 +20,6 @@ const ExercisePage = () => {
       transition={{ duration: 0.75, ease: [0.43, 0.13, 0.23, 0.96] }}
     >
       <WeightChart selectedExercise={selectedExercise} />
-      {/* <VolumeChart /> */}
     </motion.div>
   );
 };

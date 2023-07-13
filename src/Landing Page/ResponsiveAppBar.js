@@ -9,17 +9,13 @@ import Menu from "@mui/material/Menu";
 import MenuIcon from "@mui/icons-material/Menu";
 import Container from "@mui/material/Container";
 import Button from "@mui/material/Button";
-import Tooltip from "@mui/material/Tooltip";
 import MenuItem from "@mui/material/MenuItem";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import FitnessCenterIcon from "@mui/icons-material/FitnessCenter";
 import { signOut } from "firebase/auth";
-import { auth } from "../firebaseConfig";
+import { auth } from "../firebase/firebaseConfig";
 import Snackbar from "@mui/material/Snackbar";
 import Alert from "@mui/material/Alert";
-import Notes from "../Notes";
-import Calendar from "../Dashboard";
-import ProgressCharts from "../Charts/WeightChart";
 
 const pages = [
   { label: "Calendar", path: "/dashboard" },
@@ -67,8 +63,6 @@ function ResponsiveAppBar() {
       console.error(err);
     }
   };
-
-  const isMobileDevice = /Mobi/i.test(window.navigator.userAgent);
 
   return (
     <AppBar id="navbar" position="static">

@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { collection, getDocs, query, where, orderBy } from "firebase/firestore";
-import { db, auth } from "./firebaseConfig";
+import { db, auth } from "../../firebase/firebaseConfig";
 import Button from "@mui/material/Button";
 import Drawer from "@mui/material/Drawer";
 import Typography from "@mui/material/Typography";
@@ -82,7 +82,7 @@ const ExerciseHistory = ({
               });
 
               return Object.entries(groupedData).map(([date, sets], index) => (
-                <div key={index}>
+                <Box padding={1.5} key={index}>
                   <Typography
                     variant="subtitle1"
                     gutterBottom
@@ -133,12 +133,12 @@ const ExerciseHistory = ({
                         </Typography>
                       </div>
                     ))}
-                </div>
+                </Box>
               ));
             })()
           ) : (
             <Typography variant="subtitle1" gutterBottom>
-              Loading exercise history...
+              Select an exercise to view history
             </Typography>
           )}
         </div>

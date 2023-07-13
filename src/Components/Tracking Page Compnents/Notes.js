@@ -6,7 +6,7 @@ import IconButton from "@mui/material/IconButton";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
 import Drawer from "@mui/material/Drawer";
-import { db, auth } from "./firebaseConfig";
+import { db, auth } from "../../firebase/firebaseConfig";
 import {
   getDocs,
   collection,

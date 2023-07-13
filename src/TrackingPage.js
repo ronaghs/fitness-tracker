@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
-import { db, auth } from "./firebaseConfig";
+import { db, auth } from "./firebase/firebaseConfig";
 import {
   getDocs,
   collection,
@@ -9,42 +9,20 @@ import {
   updateDoc,
   query,
   where,
-  orderBy,
-  onSnapshot,
 } from "firebase/firestore";
 import { onAuthStateChanged } from "firebase/auth";
 import { useParams } from "react-router-dom";
 import ResponsiveAppBar from "./Landing Page/ResponsiveAppBar";
-import Card from "@mui/material/Card";
-import CardContent from "@mui/material/CardContent";
-import Typography from "@mui/material/Typography";
-import Button from "@mui/material/Button";
 import Box from "@mui/material/Box";
-import DeleteIcon from "@mui/icons-material/Delete";
-import EditIcon from "@mui/icons-material/Edit";
-import { IconButton, Tooltip, Modal, TextField } from "@mui/material";
-import Drawer from "@mui/material/Drawer";
-import { styled } from "@mui/system";
-import Notes from "./Notes";
-import { AddNotesButton } from "./AddNotesButton";
-import ExerciseName from "./ExerciseName";
-import ExerciseHistory from "./ExerciseHistory";
+import Notes from "./Components/Tracking Page Compnents/Notes";
 import { motion } from "framer-motion";
-
-const ModalContainer = styled("div")(({ theme }) => ({
-  position: "absolute",
-  top: "50%",
-  left: "50%",
-  transform: "translate(-50%, -50%)",
-  width: "300px",
-  backgroundColor: theme.palette.background.paper,
-  border: "2px solid #000",
-  boxShadow: theme.shadows[5],
-  padding: theme.spacing(2, 4, 3),
-}));
+import WorkoutCard from "./Components/Tracking Page Compnents/WorkoutCard";
+import ExerciseInputField from "./Components/Tracking Page Compnents/ExerciseInputField";
+import WorkoutTitle from "./Components/Tracking Page Compnents/WorkoutTitle";
+import EditSetModal from "./Components/Tracking Page Compnents/EditSetModal";
 
 export function TrackingPage() {
-  const { date, eventTitle } = useParams();
+  const { date } = useParams();
   const [workouts, setWorkouts] = useState([]);
   const [exercise, setExercise] = useState("");
   const [reps, setReps] = useState("");
@@ -54,7 +32,6 @@ export function TrackingPage() {
   const [tempReps, setTempReps] = useState("");
   const [tempWeight, setTempWeight] = useState("");
   const [notes, setNotes] = useState("");
-  const [notesInput, setNotesInput] = useState("");
   const [openDrawer, setOpenDrawer] = useState(false);
   const repsInputRef = useRef(null);
 
@@ -62,7 +39,6 @@ export function TrackingPage() {
   const workoutTitle = decodeURIComponent(
     pathname.split("/").slice(3).join("/")
   );
-  console.log(workoutTitle);
 
   useEffect(() => {
     const fetchWorkouts = async () => {
@@ -165,43 +141,50 @@ export function TrackingPage() {
     }
   };
 
+  //Refetching the workout data from firebase so that the order of the sets rendered is not altered upon deleting a set
   const deleteWorkout = async (id) => {
     try {
       const user = auth.currentUser;
       if (user) {
         const workoutDocRef = doc(db, "users", user.uid, "workouts", id);
-
         await deleteDoc(workoutDocRef);
-
-        setWorkouts((prevWorkouts) => {
-          // Filter out the deleted workout
-          const updatedWorkouts = prevWorkouts.filter(
-            (workout) => workout.id !== id
-          );
-
-          // Renumber the sets for the remaining workouts of the same exercise
-          const remainingWorkouts = updatedWorkouts.filter(
-            (workout) => workout.exercise === exercise
-          );
-          const renumberedWorkouts = remainingWorkouts.map(
-            (workout, index) => ({
-              ...workout,
-              set: index + 1,
-            })
-          );
-
-          // Merge the updated and renumbered workouts
-          return updatedWorkouts.map((workout) =>
-            workout.exercise === exercise
-              ? renumberedWorkouts.find((w) => w.id === workout.id)
-              : workout
-          );
-        });
+        fetchWorkouts(); // Fetch the updated workouts after deleting
       }
     } catch (error) {
       console.error("Error deleting workout: ", error);
     }
   };
+
+  const fetchWorkouts = async () => {
+    try {
+      const user = auth.currentUser;
+      if (user) {
+        const workoutsCollectionRef = collection(
+          db,
+          "users",
+          user.uid,
+          "workouts"
+        );
+        const q = query(
+          workoutsCollectionRef,
+          where("date", "==", date),
+          where("uid", "==", user.uid)
+        );
+        const snapshot = await getDocs(q);
+        const workoutData = snapshot.docs.map((doc) => ({
+          id: doc.id,
+          ...doc.data(),
+        }));
+        setWorkouts(workoutData);
+      }
+    } catch (error) {
+      console.error("Error fetching workouts: ", error);
+    }
+  };
+
+  useEffect(() => {
+    fetchWorkouts();
+  }, [date]);
 
   const groupWorkoutsByExercise = () => {
     const groupedWorkouts = new Map();
@@ -261,10 +244,6 @@ export function TrackingPage() {
 
     const groupedWorkouts = groupWorkoutsByExercise();
 
-    const handleOpenDrawer = () => {
-      setOpenDrawer(true);
-    };
-
     const handleCloseDrawer = () => {
       setOpenDrawer(false);
     };
@@ -273,75 +252,19 @@ export function TrackingPage() {
       <Box>
         <Notes date={date} />
         {groupedWorkouts.map((group, index) => (
-          <Card key={index} className="exerciseCard">
-            <CardContent>
-              <Typography
-                variant="h6"
-                component="h2"
-                className="exerciseName"
-                style={{
-                  fontSize: "1.75rem",
-                  fontWeight: "bold",
-                }}
-                sx={{ color: "#0372f0" }}
-              >
-                {group.exercise}
-              </Typography>
-              <div style={{ display: "flex", flexWrap: "wrap" }}>
-                {group.sets
-                  .sort((a, b) => a.set - b.set)
-                  .map((set, setIndex) => (
-                    <motion.div
-                      key={setIndex}
-                      initial={{ opacity: 0, y: -100 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ duration: 0.5, delay: setIndex * 0.1 }}
-                      className="workoutSet"
-                    >
-                      <Typography
-                        variant="body1"
-                        component="p"
-                        className="setData"
-                      >
-                        <span className="setLabel">Repitions:</span>{" "}
-                        {editSetId === set.id ? tempReps : set.reps}
-                      </Typography>
-                      <Typography
-                        variant="body1"
-                        component="p"
-                        className="setData"
-                      >
-                        <span className="setLabel">Weight(lbs):</span>{" "}
-                        {editSetId === set.id ? tempWeight : set.weight}
-                      </Typography>
-                      <Tooltip title="Delete Set">
-                        <IconButton
-                          onClick={() => deleteWorkout(set.id)}
-                          aria-label="delete"
-                          sx={{ color: "red" }}
-                        >
-                          <DeleteIcon />
-                        </IconButton>
-                      </Tooltip>
-                      <Tooltip title="Edit Set">
-                        <IconButton
-                          onClick={() => handleEditClick(set)}
-                          aria-label="edit"
-                          sx={{ color: "green" }}
-                        >
-                          <EditIcon />
-                        </IconButton>
-                      </Tooltip>
-                    </motion.div>
-                  ))}
-              </div>
-            </CardContent>
-            <ExerciseHistory
-              selectedExercise={group.exercise}
-              openDrawer={openDrawer}
-              handleCloseDrawer={handleCloseDrawer}
-            />
-          </Card>
+          <WorkoutCard
+            key={index}
+            group={group}
+            editSetId={editSetId}
+            tempReps={tempReps}
+            tempWeight={tempWeight}
+            deleteWorkout={deleteWorkout}
+            handleEditClick={handleEditClick}
+            openDrawer={openDrawer}
+            handleCloseDrawer={handleCloseDrawer}
+            setTempReps={setTempReps}
+            setTempWeight={setTempWeight}
+          />
         ))}
       </Box>
     );
@@ -410,112 +333,34 @@ export function TrackingPage() {
 
   return (
     <motion.div
-      initial={{ opacity: 0, y: "100%" }} // Initial state
-      animate={{ opacity: 1, y: "0%" }} // Animation state
-      exit={{ opacity: 0, y: "-100%" }} // Exit state
+      initial={{ opacity: 0, y: "100%" }}
+      animate={{ opacity: 1, y: "0%" }}
+      exit={{ opacity: 0, y: "-100%" }}
       transition={{ duration: 1, ease: [0.43, 0.13, 0.23, 0.96] }}
     >
       <ResponsiveAppBar />
-      <div className="exerciseInputFieldContainer">
-        {/* <TextField
-          id="filled-basic"
-          label="Exercise"
-          variant="outlined"
-          type="text"
-          value={exercise}
-          onChange={(e) => setExercise(e.target.value)}
-        /> */}
-        <ExerciseName
-          value={exercise}
-          onChange={(e) => setExercise(e.target.value)}
-        />
-        <TextField
-          sx={{ width: 125 }}
-          id="filled-basic"
-          label="Reps"
-          variant="outlined"
-          ref={repsInputRef}
-          type="number"
-          value={reps}
-          onChange={(e) => {
-            const value = parseInt(e.target.value);
-            if (value >= 0 || isNaN(value)) {
-              // Validate if the value is greater than or equal to 0 or NaN
-              setReps(e.target.value);
-            }
-          }}
-          onKeyDown={handleKeyPress} // Call addWorkout when Enter key is pressed
-        />
-
-        <TextField
-          sx={{ width: 125 }}
-          id="filled-basic"
-          label="Weight(lbs)"
-          variant="outlined"
-          type="number"
-          value={weight}
-          onChange={(e) => {
-            const value = parseInt(e.target.value);
-            if (value >= 0 || isNaN(value)) {
-              // Validate if the value is greater than or equal to 0 or NaN
-              setWeight(e.target.value);
-            }
-          }}
-          onKeyDown={handleKeyPress} // Call addWorkout when Enter key is pressed
-        />
-        <button className="addSetButton" onClick={addWorkout}>
-          Add Set
-        </button>
-      </div>
-
-      <h1 className="workoutTitle">{workoutTitle}</h1>
+      <ExerciseInputField
+        exercise={exercise}
+        setExercise={setExercise}
+        reps={reps}
+        setReps={setReps}
+        weight={weight}
+        setWeight={setWeight}
+        addWorkout={addWorkout}
+        handleKeyPress={handleKeyPress}
+        repsInputRef={repsInputRef}
+      />
+      <WorkoutTitle workoutTitle={workoutTitle} />
       <div>{renderWorkouts()}</div>
-      <Modal open={openModal} onClose={handleCancelEdit}>
-        <Box
-          sx={{
-            position: "absolute",
-            top: "50%",
-            left: "50%",
-            transform: "translate(-50%, -50%)",
-            width: 200,
-            bgcolor: "background.paper",
-            boxShadow: 24,
-            p: 4,
-          }}
-        >
-          <Typography variant="h6" gutterBottom>
-            Edit Set
-          </Typography>
-          <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
-            <label>
-              Reps
-              <input
-                className="editModalInput"
-                type="number"
-                value={tempReps}
-                onChange={(e) => setTempReps(e.target.value)}
-              />
-            </label>
-            <label>
-              Weight
-              <input
-                className="editModalInput"
-                type="number"
-                value={tempWeight}
-                onChange={(e) => setTempWeight(e.target.value)}
-              />
-            </label>
-          </Box>
-          <Box sx={{ display: "flex", justifyContent: "flex", gap: 2, mt: 2 }}>
-            <Button onClick={handleSaveEdit} variant="contained">
-              Save
-            </Button>
-            <Button onClick={handleCancelEdit} variant="outlined">
-              Cancel
-            </Button>
-          </Box>
-        </Box>
-      </Modal>
+      <EditSetModal
+        openModal={openModal}
+        handleCancelEdit={handleCancelEdit}
+        handleSaveEdit={handleSaveEdit}
+        tempReps={tempReps}
+        setTempReps={setTempReps}
+        tempWeight={tempWeight}
+        setTempWeight={setTempWeight}
+      />
     </motion.div>
   );
 }

@@ -19,8 +19,10 @@ import Alert from "@mui/material/Alert";
 
 const pages = [
   { label: "Calendar", path: "/dashboard" },
+  { label: "Exercise Library", path: "/exerciselibrary" },
   { label: "Progress Charts", path: "/graphs" },
 ];
+
 const settings = ["Profile", "Account", "Dashboard", "Logout"];
 
 function ResponsiveAppBar() {

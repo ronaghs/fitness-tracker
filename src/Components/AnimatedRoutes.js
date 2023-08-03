@@ -7,6 +7,7 @@ import Dashboard from "../Dashboard";
 import { TrackingPage } from "../TrackingPage";
 import Notes from "./Tracking Page Compnents/Notes";
 import ProgressCharts from "../ProgressCharts";
+import ExerciseLibraryHome from "../Charts/ExerciseLibraryHome";
 import { AnimatePresence } from "framer-motion";
 
 function AnimatedRoutes() {
@@ -22,6 +23,7 @@ function AnimatedRoutes() {
         <Route path="/log/:date/*" element={<TrackingPage />} />
         <Route path="/notes*" element={<Notes />} />
         <Route path="/graphs" element={<ProgressCharts />} />
+        <Route path="/exerciselibrary" element={<ExerciseLibraryHome />} />
       </Routes>
     </AnimatePresence>
   );

@@ -85,6 +85,7 @@ function ExerciseLibrary({ setExercises, bodyPart, setBodyPart }) {
         </Box>
         <Box sx={{ postion: "relative", width: "100%", p: "1.25rem" }}>
           <HorizontalScroll
+            isBodyPart
             data={bodyParts}
             bodyPart={bodyPart}
             setBodyPart={setBodyPart}

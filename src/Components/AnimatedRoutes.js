@@ -9,6 +9,7 @@ import Notes from "./Tracking Page Compnents/Notes";
 import ProgressCharts from "../ProgressCharts";
 import ExerciseLibraryHome from "../Charts/ExerciseLibraryHome";
 import { AnimatePresence } from "framer-motion";
+import ExerciseInformation from "../Charts/ExerciseInformation";
 
 function AnimatedRoutes() {
   const location = useLocation();
@@ -24,6 +25,7 @@ function AnimatedRoutes() {
         <Route path="/notes*" element={<Notes />} />
         <Route path="/graphs" element={<ProgressCharts />} />
         <Route path="/exerciselibrary" element={<ExerciseLibraryHome />} />
+        <Route path="/exercise/:id" element={<ExerciseInformation />} />
       </Routes>
     </AnimatePresence>
   );

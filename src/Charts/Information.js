@@ -1,24 +1,27 @@
 import React from "react";
-import { Typography, Stack, Button } from "@mui/material";
-import BodyPartImage from "../Images/body-part.png";
-import TargetImage from "../Images/target.png";
-import EquipmentImage from "../Images/equipment.png";
+import { Typography, Stack, Button, Tooltip } from "@mui/material";
+import Musclegroup from "../Images/musclegroup.png";
+import TargetImage from "../Images/targetmuscle.png";
+import GymEquipment from "../Images/gymequipment.png";
 
 function Information({ exerciseInformation }) {
   const { bodyPart, gifUrl, name, target, equipment } = exerciseInformation;
 
   const extraInformation = [
     {
-      icon: BodyPartImage,
+      icon: Musclegroup,
       name: bodyPart,
+      tooltip: "Muscle Group",
     },
     {
       icon: TargetImage,
       name: target,
+      tooltip: "Target Muscle",
     },
     {
-      icon: EquipmentImage,
+      icon: GymEquipment,
       name: equipment,
+      tooltip: "Equipment Needed",
     },
   ];
 
@@ -44,20 +47,22 @@ function Information({ exerciseInformation }) {
             gap="1.5rem"
             alignItems="center"
           >
-            <Button
-              sx={{
-                background: "#6aabe2",
-                borderRadius: "50%",
-                width: "100px",
-                height: "100px",
-              }}
-            >
-              <img
-                src={item.icon}
-                alt={bodyPart}
-                style={{ width: "50px", height: "50px" }}
-              />
-            </Button>
+            <Tooltip title={item.tooltip} placement="top">
+              <Button
+                sx={{
+                  background: "#6aabe2",
+                  borderRadius: "50%",
+                  width: "100px",
+                  height: "100px",
+                }}
+              >
+                <img
+                  src={item.icon}
+                  alt={bodyPart}
+                  style={{ width: "50px", height: "50px" }}
+                />
+              </Button>
+            </Tooltip>
             <Typography variant="h6" textTransform="capitalize">
               {item.name}
             </Typography>

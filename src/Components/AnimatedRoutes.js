@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Route, Routes, useLocation } from "react-router-dom";
 import LandingPage from "../LandingPage";
 import SignIn from "../SignIn/SignIn";
@@ -14,6 +14,16 @@ import ExerciseInformation from "../Charts/ExerciseInformation";
 function AnimatedRoutes() {
   const location = useLocation();
 
+  //To prevent scroll restoration. Mainly for when user clicks an exercise card from the exercise library.
+  function useScrollToTop() {
+    const { pathname } = useLocation();
+
+    useEffect(() => {
+      window.scrollTo(0, 0);
+    }, [pathname]);
+  }
+
+  useScrollToTop();
   return (
     <AnimatePresence mode="wait">
       <Routes location={location} key={location.pathname}>

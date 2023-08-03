@@ -67,11 +67,15 @@ function ResponsiveAppBar() {
   };
 
   return (
-    <AppBar id="navbar" position="static">
+    <AppBar id="navbar" position="sticky">
       <Container maxWidth="xlg">
         <Toolbar className="toolBar" disableGutters>
           <FitnessCenterIcon
-            sx={{ display: { xs: "none", md: "flex" }, mr: 1, ml: 21 }}
+            sx={{
+              display: { xs: "none", md: "flex" },
+              mr: 1,
+              ml: { lg: 18, m: 5 },
+            }}
           />
           <Typography
             variant="h6"

@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import ResponsiveAppBar from "../Landing Page/ResponsiveAppBar";
 import { Box, Button, Stack, TextField, Typography } from "@mui/material";
 import { exerciseOptions, fetchData } from "../utils/fetchData";
 import HorizontalScroll from "./HorizontalScroll";

@@ -2,7 +2,7 @@ import React from "react";
 import { Stack, Typography } from "@mui/material";
 import Gym from "../Images/gym.png";
 
-function BodyPart({ item, setBodyPart, bodyPart }) {
+function BodyPart({ item, setBodyPart, bodyPart, icon }) {
   return (
     <Stack
       type="button"
@@ -22,7 +22,12 @@ function BodyPart({ item, setBodyPart, bodyPart }) {
         window.scrollTo({ top: 600, behavior: "smooth" });
       }}
     >
-      <img src={Gym} alt="gym icon" style={{ width: "3rem", height: "3rem" }} />
+      <img
+        // src={Gym}
+        src={icon}
+        alt="gym icon"
+        style={{ width: "3rem", height: "3rem" }}
+      />
       <Typography
         fontSize="1.5rem"
         fontWeight="bold"

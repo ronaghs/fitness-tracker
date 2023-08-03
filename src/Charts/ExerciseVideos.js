@@ -5,7 +5,7 @@ function ExcerciseVideos({ exerciseVideos, name }) {
   if (!exerciseVideos.length) return "Loading...";
 
   return (
-    <Box sx={{ mt: { lg: "200px", xs: "20px" } }} p="20px">
+    <Box sx={{ mt: { lg: "200px", xs: "25px" }, p: "5px" }}>
       <Typography variant="h4" mb="30px">
         Watch{" "}
         <span
@@ -21,9 +21,9 @@ function ExcerciseVideos({ exerciseVideos, name }) {
         justifyContent="flex-start"
         flexWrap="wrap"
         alignItems="center"
-        sx={{ flexDirection: { lg: "row" }, gap: { lg: "110px", xs: "0" } }}
+        sx={{ flexDirection: { lg: "row" }, gap: { lg: "80px", xs: "60px" } }}
       >
-        {exerciseVideos?.slice(0, 3)?.map((item, index) => (
+        {exerciseVideos?.slice(0, 4)?.map((item, index) => (
           <a
             key={index}
             className="exercise-video"

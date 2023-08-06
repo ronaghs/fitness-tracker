@@ -35,7 +35,7 @@
 }
 
 .bgImg1 {
-  background-image: url("./Images/bg1.jpg");
+  background-image: url("./assets/Images/bg1.jpg");
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
@@ -45,7 +45,7 @@
 }
 
 .bgImg2 {
-  background-image: url("./Images/bg2.jpg");
+  background-image: url("./assets/Images/bg2.jpg");
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;

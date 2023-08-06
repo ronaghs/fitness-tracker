@@ -1,7 +1,7 @@
 import React from "react";
 import { BrowserRouter as Router } from "react-router-dom";
-import Footer from "./Landing Page/Footer";
-import AnimatedRoutes from "./Components/AnimatedRoutes";
+import Footer from "./components/Layout/Footer";
+import AnimatedRoutes from "./routes/AnimatedRoutes";
 function App() {
   return (
     <div className="appContainer">

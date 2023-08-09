@@ -1,6 +1,5 @@
 import React from "react";
 import { Stack, Typography } from "@mui/material";
-import Gym from "../../assets/Images/gym.png";
 
 function BodyPart({ item, setBodyPart, bodyPart, icon }) {
   return (
@@ -23,7 +22,6 @@ function BodyPart({ item, setBodyPart, bodyPart, icon }) {
       }}
     >
       <img
-        // src={Gym}
         src={icon}
         alt="gym icon"
         style={{ width: "3rem", height: "3rem" }}

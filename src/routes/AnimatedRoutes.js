@@ -5,7 +5,6 @@ import SignIn from "../components/SignInUpPage/SignIn";
 import SignUp from "../components/SignInUpPage/SignUp";
 import Dashboard from "../components/CalendarPage/Dashboard";
 import { TrackingPage } from "../components/TrackingPage/TrackingPage";
-import Notes from "../components/TrackingPage/Notes";
 import ProgressCharts from "../components/ProgressChartsPage/ProgressCharts";
 import ExerciseLibraryHome from "../components/ExerciseLibraryPage/ExerciseLibraryHome";
 import { AnimatePresence } from "framer-motion";
@@ -32,7 +31,6 @@ function AnimatedRoutes() {
         <Route path="/signup" element={<SignUp />} />
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/log/:date/*" element={<TrackingPage />} />
-        <Route path="/notes*" element={<Notes />} />
         <Route path="/graphs" element={<ProgressCharts />} />
         <Route path="/exerciselibrary" element={<ExerciseLibraryHome />} />
         <Route path="/exercise/:id" element={<ExerciseInformation />} />

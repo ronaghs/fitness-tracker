@@ -24,8 +24,8 @@ function Notes({ date }) {
   const [note, setNote] = useState("");
   const [userUid, setUserUid] = useState(null);
   const [editingNoteId, setEditingNoteId] = useState(null);
-  const [noteError, setNoteError] = useState(false); // State variable for input validation
-  const notesInputRef = useRef(null); // Reference to the notes input TextField
+  const [noteError, setNoteError] = useState(false);
+  const notesInputRef = useRef(null);
 
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged((user) => {
@@ -82,17 +82,17 @@ function Notes({ date }) {
           const noteDoc = doc(notesCollectionRef, editingNoteId);
           await updateDoc(noteDoc, {
             note: note,
-            date: date, // Add the date to the note
+            date: date,
           });
           setEditingNoteId(null);
         } else {
           await addDoc(notesCollectionRef, {
             note: note,
-            date: date, // Add the date to the note
+            date: date,
           });
         }
         setNote("");
-        setNoteError(false); // Reset validation error
+        setNoteError(false);
         getNotes();
       }
     } catch (err) {

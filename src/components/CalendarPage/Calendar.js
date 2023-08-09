@@ -23,7 +23,6 @@ import {
 } from "firebase/firestore";
 import { db, auth } from "../../firebase/firebaseConfig";
 import { onAuthStateChanged } from "firebase/auth";
-
 import { motion } from "framer-motion";
 
 const Calendar = () => {
@@ -71,6 +70,7 @@ const Calendar = () => {
 
     if (existingEvent) {
       // An event already exists for the clicked date, navigate to the trackingpage component
+      //else, open the event modal to allow for an input
       navigate(
         `/log/${clickedDate}/${encodeURIComponent(existingEvent.title)}`
       );
@@ -86,7 +86,7 @@ const Calendar = () => {
   };
 
   const handleAddEvent = async () => {
-    const maxLength = 30; // Maximum number of characters for the event title
+    const maxLength = 30; // Maximum number of characters for the event title (workaround for long strings getting cut off)
     let truncatedTitle = eventTitle;
 
     if (eventTitle.length > maxLength) {
@@ -110,13 +110,13 @@ const Calendar = () => {
       weight: 0,
       reps: 0,
       set: 0,
-      userId: auth.currentUser.uid, // Add the userId field to the event
+      userId: auth.currentUser.uid,
     };
 
     try {
       const user = auth.currentUser;
       if (!user) {
-        // User is not authenticated, handle accordingly
+        // If user is not authenticated, handle accordingly
         return;
       }
 
@@ -137,12 +137,12 @@ const Calendar = () => {
   };
 
   const handleDeleteEvent = async (eventId, event) => {
-    event.stopPropagation(); // Stop event propagation to prevent navigation when clicking the delete icon
+    event.stopPropagation(); // Stop event propagation to prevent navigation when clicking the delete icons within a calendar cell
 
     try {
       const user = auth.currentUser;
       if (!user) {
-        // User is not authenticated, handle accordingly
+        // I user is not authenticated, handle accordingly
         return;
       }
 

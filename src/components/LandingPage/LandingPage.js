@@ -9,7 +9,6 @@ import Divider from "./Divider";
 import calendar from "../../assets/Images/calendar.png";
 import log from "../../assets/Images/log.png";
 import graph from "../../assets/Images/graph.png";
-import Footer from "../Layout/Footer";
 import { Box } from "@mui/material";
 import { motion } from "framer-motion";
 

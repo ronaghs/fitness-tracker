@@ -9,6 +9,8 @@ import ProgressCharts from "../components/ProgressChartsPage/ProgressCharts";
 import ExerciseLibraryHome from "../components/ExerciseLibraryPage/ExerciseLibraryHome";
 import { AnimatePresence } from "framer-motion";
 import ExerciseInformation from "../components/ExerciseLibraryPage/ExerciseInformation";
+import ProtectedRoutes from "./ProtectedRoutes";
+import Footer from "../components/Layout/Footer";
 
 function AnimatedRoutes() {
   const location = useLocation();
@@ -29,12 +31,15 @@ function AnimatedRoutes() {
         <Route path="/" element={<LandingPage />} />
         <Route path="/signin" element={<SignIn />} />
         <Route path="/signup" element={<SignUp />} />
-        <Route path="/dashboard" element={<Dashboard />} />
-        <Route path="/log/:date/*" element={<TrackingPage />} />
-        <Route path="/graphs" element={<ProgressCharts />} />
-        <Route path="/exerciselibrary" element={<ExerciseLibraryHome />} />
-        <Route path="/exercise/:id" element={<ExerciseInformation />} />
+        <Route element={<ProtectedRoutes />}>
+          <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/log/:date/*" element={<TrackingPage />} />
+          <Route path="/graphs" element={<ProgressCharts />} />
+          <Route path="/exerciselibrary" element={<ExerciseLibraryHome />} />
+          <Route path="/exercise/:id" element={<ExerciseInformation />} />
+        </Route>
       </Routes>
+      <Footer />
     </AnimatePresence>
   );
 }

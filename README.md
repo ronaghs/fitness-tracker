@@ -3,8 +3,6 @@
 Website link:
 [ElevateExcellence](https://654d625ff5ecc30a5eab4464--zingy-quokka-c8728d.netlify.app/)
 
-## ElevateExcellence
-
 ## Table of Contents
 
 - [Description](#description)

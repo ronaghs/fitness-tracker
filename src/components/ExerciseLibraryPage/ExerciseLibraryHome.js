@@ -8,8 +8,6 @@ function ExerciseLibrayHome() {
   const [exercises, setExercises] = useState([]);
   const [bodyPart, setBodyPart] = useState("all");
 
-  console.log(bodyPart);
-
   return (
     <motion.div
       initial={false} // Initial state...no Y so page does not scroll down on refresh

@@ -42,7 +42,7 @@ function Information({ exerciseInformation }) {
         </Typography>
         {extraInformation.map((item) => (
           <Stack
-            key={item.name}
+            key={`${item.name}-${item.tooltip}`} // Updated key for uniqueness
             direction="row"
             gap="1.5rem"
             alignItems="center"

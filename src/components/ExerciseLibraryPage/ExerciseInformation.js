@@ -45,8 +45,6 @@ function ExerciseInformation() {
     fetchExerciseData();
   }, [id]);
 
-  console.log(exerciseVideos);
-
   return (
     <Box>
       <ResponsiveAppBar />

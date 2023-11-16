@@ -166,7 +166,7 @@ function ResponsiveAppBar() {
                     key={page.label}
                     component={NavLink}
                     to={page.path}
-                    activeClassName="active"
+                    activeclassname="active"
                     sx={{ my: 2, color: "white", display: "block" }}
                   >
                     {page.label}

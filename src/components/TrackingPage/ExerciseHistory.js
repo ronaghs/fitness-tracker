@@ -119,7 +119,8 @@ const ExerciseHistory = ({
                             color: "#333",
                           }}
                         >
-                          <Box display="inline">Reps:</Box> {set.reps}
+                          <span style={{ marginRight: "0.5rem" }}>Reps:</span>
+                          {set.reps}
                         </Typography>
                         <Typography
                           variant="body1"
@@ -129,7 +130,10 @@ const ExerciseHistory = ({
                             color: "#333",
                           }}
                         >
-                          <Box display="inline">Weight(lbs): {set.weight}</Box>
+                          <span style={{ marginRight: "0.5rem" }}>
+                            Weight(lbs):
+                          </span>
+                          {set.weight}
                         </Typography>
                       </div>
                     ))}

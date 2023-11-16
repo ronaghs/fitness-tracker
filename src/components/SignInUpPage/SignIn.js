@@ -31,8 +31,6 @@ function SignIn() {
   const [modalOpen, setModalOpen] = useState(false);
   const navigate = useNavigate();
 
-  console.log(auth?.currentUser?.email);
-
   const signIn = async (event) => {
     event.preventDefault();
     setError(null);
@@ -42,7 +40,6 @@ function SignIn() {
       await signInWithEmailAndPassword(auth, email, password);
       navigate("/dashboard");
     } catch (err) {
-      console.error(err);
       setError("Invalid email or password");
       setLoading(false);
     }
@@ -61,7 +58,6 @@ function SignIn() {
       await signInWithPopup(auth, googleProvider);
       navigate("/dashboard");
     } catch (err) {
-      console.error(err);
       setError("Google sign-in failed");
       setLoading(false);
       setModalOpen(false);
@@ -174,11 +170,14 @@ function SignIn() {
                   </Link> */}
                 </Grid>
                 <Grid item>
-                  <NavLink to="/signup">
-                    <Link href="#" variant="body2">
-                      {"Don't have an account? Sign Up"}
-                    </Link>
+                  <NavLink to="/signup" variant="body2">
+                    {"Don't have an account? Sign Up"}
                   </NavLink>
+                  <p>
+                    Demo credentials:
+                    <br />
+                    username: demo@mail.com password: 123456
+                  </p>
                 </Grid>
               </Grid>
             </Box>
